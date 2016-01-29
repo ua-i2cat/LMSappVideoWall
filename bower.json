@@ -1,0 +1,13 @@
+{
+  "name": "LMSappVideoWallAngular",
+  "description": "A starter project for liveMediaStreaming",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.0",
+    "angular-route": "~1.4.0",
+    "angular-loader": "~1.4.0",
+    "angular-mocks": "~1.4.0"
+  }
+}

@@ -1,0 +1,47 @@
+/* app css stylesheet */
+html,body {
+  height:100%
+}
+
+body {
+  font-size:81.25%;
+  margin:0;
+  min-width:400px;
+  background: #B2DFDB;
+  /*overflow-x:hidden;
+  overflow-y:scroll*/
+}
+
+.navbar{
+  background: #009688;
+}
+
+.navbar-brand.nav-title{
+  color: #FFFFFF;
+}
+
+.viewInstance{
+  text-align: center;
+}
+
+.viewInput{
+  text-align: center;
+}
+
+.input-group{
+  margin: 0px 0px 10px;
+  padding: 0px 15px 0px 15px;
+}
+
+.input-group-addon.form{
+  background-color: #B2DFDB;
+}
+
+.btn.btn-connect {
+  background: #009688;
+  color: #FFFFFF;
+}
+
+.btn-group.btn-group-full{
+  width: 100%;
+}

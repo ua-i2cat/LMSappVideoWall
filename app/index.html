@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="video-wall-app" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="video-wall-app" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="video-wall-app" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="video-wall-app" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>LMS VideoWall</title>
+  <link rel="stylesheet" href="./styles/app.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+  <!-- google fonts -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <!--App fonts-->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/services/apiFunctions.factory.js"></script>
+  <script src="scripts/services/appFunctions.factory.js"></script>
+  <script src="scripts/controllers/instance.controller.js"></script>
+  <script src="scripts/controllers/input.controller.js"></script>
+  <script src="scripts/controllers/inputRTP.controller.js"></script>
+  <script src="scripts/controllers/tab.controller.js"></script>
+</head>
+<body >
+  <nav class="navbar">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand nav-title">LiveMediaStreamer API DEMO for Video Wall</a>
+        <button type="button" class="navbar-toggle collapsed hidden" data-toggle="collapse" data-target="#navbar-collapse-dis" aria-expanded="false" id="collapseButton">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="collapse navbar-collapse" id="navbar-collapse-dis">
+        <div class="nav navbar-nav navbar-right">
+          <a id="disconnect" href="#" data-bb="confirm" class="btn btn-default btn-navbar hidden"><span class="glyphicon glyphicon-stop"></span> Disconnect</a>
+          <a id="saveConfig" href="#" data-bb="confirm" class="btn btn-default btn-navbar hidden"><span class="glyphicon glyphicon-folder-close"></span> Save</a>
+          <a id="openConfig" href="#" data-bb="confirm" class="btn btn-default btn-navbar hidden" ><span class="glyphicon glyphicon-folder-open"></span> Open</a>
+          <input type="file" id="selector-files" class ="hidden"/>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div ng-view></div>
+</body>
+</html>
