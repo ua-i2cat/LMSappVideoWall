@@ -12,7 +12,6 @@ function inputController(appFunctions, apiFunctions, $window){
                 }
             };
             appFunctions.setReceiverToSplitterRTMP();
-            console.log(lmsInput);
             apiFunctions.createFilter(transmitterId, "transmitter");
             $window.location.href='#/control';
         } else if(/^(rtsp):\/\/[^ "]+$/.test(vm.uri)) {
@@ -24,7 +23,6 @@ function inputController(appFunctions, apiFunctions, $window){
                 }
             };
             appFunctions.setReceiverToSplitterRTSP();
-            console.log(lmsInput);
             apiFunctions.createFilter(transmitterId, "transmitter");
             $window.location.href='#/control';
         } else {
@@ -34,9 +32,6 @@ function inputController(appFunctions, apiFunctions, $window){
 
     };
 }
-
-
-
 
 angular
     .module('video-wall-app')

@@ -1,6 +1,7 @@
 'use strict';
 
 function appFunctions(apiFunctions){
+    var okmsg = false;
     return {
         setSplitterToTransmitter: function(message){
 

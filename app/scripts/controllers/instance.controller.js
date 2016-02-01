@@ -12,11 +12,11 @@ function instanceController($http, $window){
         sHost = vm.instance.serverHostname;
         sPort = vm.instance.serverPort;
 
-        var uri = 'http://'+ vm.instance.apiHostname +':'+ vm.instance.apiPort +'/api/connect';
+        var uri = 'http://'+ vm.instance.apiHostname +':'+ vm.instance.apiPort +'/api';
 
         $http({
             method: 'POST',
-            url: uri,
+            url: uri + '/connect',
             data: message,
             headers: {'Content-Type': 'application/json'}
         }).then(function succesCallback(response) {
