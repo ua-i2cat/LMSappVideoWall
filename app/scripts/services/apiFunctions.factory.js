@@ -16,10 +16,9 @@ function apiFunctions($http) {
                 data: JSON.stringify(message),
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
-                console.log(response);
                 if (!response.data.error) {
                     console.log("CONFIGURE FILTER");
-                    console.log(response.data);
+                    console.log(response.data.message);
                     okmsg = true;
                 } else {
                     console.log(response.data.error);
@@ -43,10 +42,9 @@ function apiFunctions($http) {
                 data: JSON.stringify(message),
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
-                console.log(response);
                 if (!response.data.error) {
                     console.log("CREATE FILTER");
-                    console.log(response.data);
+                    console.log(response.data.message);
                     okmsg = true;
                 } else {
                     console.log(response.data.error);
@@ -74,10 +72,9 @@ function apiFunctions($http) {
                 data: JSON.stringify(message),
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
-                console.log(response);
                 if (!response.data.error) {
                     console.log("CREATE PATH");
-                    console.log(response.data);
+                    console.log(response.data.message);
                     okmsg = true;
                 } else {
                     console.log(response.data.error);
@@ -98,10 +95,9 @@ function apiFunctions($http) {
                 url: uri,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
-                console.log(response);
                 if (!response.data.error) {
-                    console.log("CREATE PATH");
-                    console.log(response.data);
+                    console.log("DELETE PATH");
+                    console.log(response.data.message);
                     okmsg = true;
                 } else {
                     console.log(response.data.error);
@@ -122,10 +118,9 @@ function apiFunctions($http) {
                 url: uri,
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
-                console.log(response);
                 if (!response.data.error) {
-                    console.log("CREATE PATH");
-                    console.log(response.data);
+                    console.log("GET STATE");
+                    console.log(response.data.message);
                     okmsg = true;
                 } else {
                     console.log(response.data.error);

@@ -1,6 +1,6 @@
 'use strict';
 
-function config($routeProvider, $httpProvider){
+function config($routeProvider){
     $routeProvider
         .when('/',{
             templateUrl: './views/instance.html',
@@ -20,9 +20,6 @@ function config($routeProvider, $httpProvider){
         .otherwise({
             redirectTo: '/'
         });
-
-    $httpProvider.defaults.useXDomain = true;
-    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 }
 
 angular
