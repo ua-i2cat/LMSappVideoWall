@@ -1,9 +1,10 @@
 'use strict';
 
-function inputRTPController($scope, $log, $http){
+function inputRTPController(appFunctions, apiFunctions, $window){
+    var vm = this;
 
-    $scope.inputRTPAudioCodec = {
-        codecSelect: 'null',
+    vm.inputRTPAudioCodec = {
+        codecSelect: 'pcm',
         availableCodecs: [
             {name: 'pcm'},
             {name: 'pcmu'},
@@ -11,32 +12,56 @@ function inputRTPController($scope, $log, $http){
             {name: 'aac'}
         ]
     };
-    $scope.inputRTPAudioSampleRate = {
-        sampleRateSelect: 'null',
+    vm.inputRTPAudioSampleRate = {
+        sampleRateSelect: '8000',
         availableSampleRates: [
             {value: 8000},
             {value: 44100},
             {value: 48000}
         ]
     };
-    $scope.inputRTPAudioChannels = {
-        channelsSelect: 'null',
+    vm.inputRTPAudioChannels = {
+        channelsSelect: '1',
         availableChannels: [
             {value: 1},
             {value: 2}
         ]
     };
-    $scope.inputRTPVideoCodec = {
-        codecSelect: 'null',
+    vm.inputRTPVideoCodec = {
+        codecSelect: 'H264',
         availableCodecs: [
             {name: 'H264'},
             {name: 'H265'}
         ]
     };
 
-    $scope.audioRTP = function(){};
-    $scope.audioRTP = function(){};
-    $scope.audioRTP = function(){};
+    vm.audioRTP = function(){
+        console.log(vm);
+
+    };
+    vm.videoRTP = function(){
+        lmsInput = {
+            'params'    : {
+                "subsessions":[
+                    {
+                        "medium":"video",
+                        "codec":vm.inputRTPVideoCodec.codecSelect,
+                        "bandwidth":5000,
+                        "timeStampFrequency":90000,
+                        "channels":null,
+                        "port":vm.inputRTPVideoPort
+                    }
+                ]
+            }
+        };
+        apiFunctions.createFilter(receiverId, "receiver");
+        appFunctions.setReceiverToSplitter('v');
+        apiFunctions.createFilter(transmitterId, "transmitter");
+        $window.location.href='#/control';
+    };
+    vm.bothRTP = function(){
+        console.log(vm);
+    };
 
 }
 

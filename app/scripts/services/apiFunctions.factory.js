@@ -1,7 +1,6 @@
 'use strict';
 
 function apiFunctions($http) {
-    var okmsg = false;
     return {
         configureFilter: function(filterId, action, params){
             var uri = apiUri + '/filter/' + filterId,
@@ -17,9 +16,7 @@ function apiFunctions($http) {
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
                 if (!response.data.error) {
-                    console.log("CONFIGURE FILTER");
                     console.log(response.data.message);
-                    okmsg = true;
                 } else {
                     console.log(response.data.error);
                 }
@@ -27,8 +24,6 @@ function apiFunctions($http) {
                 console.log('ERROR: \
                             ' + response.data.error + ' - No API available');
               });
-
-            return okmsg;
         },
 
         createFilter: function(filterId, type){
@@ -43,9 +38,7 @@ function apiFunctions($http) {
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
                 if (!response.data.error) {
-                    console.log("CREATE FILTER");
                     console.log(response.data.message);
-                    okmsg = true;
                 } else {
                     console.log(response.data.error);
                 }
@@ -54,7 +47,6 @@ function apiFunctions($http) {
                             ' + response.data.error + ' - No API available');
               });
 
-            return okmsg;
         },
 
         createPath: function(pathId, orgFilterId, dstFilterId, orgWriterId, dstReaderId, midFiltersIds){
@@ -73,9 +65,7 @@ function apiFunctions($http) {
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
                 if (!response.data.error) {
-                    console.log("CREATE PATH");
                     console.log(response.data.message);
-                    okmsg = true;
                 } else {
                     console.log(response.data.error);
                 }
@@ -83,8 +73,6 @@ function apiFunctions($http) {
                 console.log('ERROR: \
                             ' + response.data.error + ' - No API available');
               });
-
-            return okmsg;
         },
 
         deletePath: function(pathId){
@@ -96,9 +84,7 @@ function apiFunctions($http) {
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
                 if (!response.data.error) {
-                    console.log("DELETE PATH");
                     console.log(response.data.message);
-                    okmsg = true;
                 } else {
                     console.log(response.data.error);
                 }
@@ -106,8 +92,6 @@ function apiFunctions($http) {
                 console.log('ERROR: \
                             ' + response.data.error + ' - No API available');
             });
-
-            return okmsg;
         },
 
         getState: function() {
@@ -119,9 +103,7 @@ function apiFunctions($http) {
                 headers: {'Content-Type': 'application/json; charset=utf-8'}
             }).then(function succesCallback(response) {
                 if (!response.data.error) {
-                    console.log("GET STATE");
                     console.log(response.data.message);
-                    okmsg = true;
                 } else {
                     console.log(response.data.error);
                 }
@@ -129,8 +111,6 @@ function apiFunctions($http) {
                 console.log('ERROR: \
                             ' + response.data.error + ' - No API available');
             });
-
-            return okmsg;
         }
     }
 }

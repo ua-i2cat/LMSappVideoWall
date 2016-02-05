@@ -1,18 +1,19 @@
 <div class="col-sm-4 col-sm-offset-4 viewInstance">
-    <form name="instanceForm" ng-submit="insCtrl.connectInstance()">
+    <div class="row">
+        <form name="instanceForm" ng-submit="insCtrl.connectInstance()">
         <div class="row">
             <h4>API connectivity parameters</h4>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">API hostname</span>
-                <input class="form-control" type="text" ng-model="insCtrl.instance.apiHostname" ng-pattern="/\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/" ng-init="insCtrl.instance.apiHostname='127.0.0.1'" required/>
+                <input class="form-control ng-dirty ng-invalid" type="text" ng-model="insCtrl.instance.apiHostname" ng-pattern="/\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/" ng-init="insCtrl.instance.apiHostname='127.0.0.1'" required/>
             </div>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">API port</span>
-                <input class="form-control" type="number" ng-model="insCtrl.instance.apiPort" ng-init="insCtrl.instance.apiPort=8080" required/>
+                <input class="form-control ng-dirty ng-invalid" type="number" ng-model="insCtrl.instance.apiPort" ng-init="insCtrl.instance.apiPort=8080" required/>
             </div>
         </div>
         <br>
@@ -22,16 +23,26 @@
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">LMS hostname</span>
-                <input class="form-control" ng-model="insCtrl.instance.serverHostname" ng-pattern="/\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/" ng-init="insCtrl.instance.serverHostname='127.0.0.1'" required/>
+                <input class="form-control ng-dirty ng-invalid" ng-model="insCtrl.instance.serverHostname" ng-pattern="/\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/" ng-init="insCtrl.instance.serverHostname='127.0.0.1'" required/>
             </div>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">LMS port</span>
-                <input class="form-control" type="number" ng-model="insCtrl.instance.serverPort" ng-init="insCtrl.instance.serverPort=7777" required/>
+                <input class="form-control ng-dirty ng-invalid" type="number" ng-model="insCtrl.instance.serverPort" ng-init="insCtrl.instance.serverPort=7777" required/>
             </div>
         </div>
         <br>
         <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Connect"/>
-    </form>
+        </form>
+    </div>
+    <br>
+    <div class="row">
+        <div class="alert alert-success" ng-show="insCtrl.successAlert" role="alert">
+            <strong>Succes!</strong> {{insCtrl.alertMessage}}
+        </div>
+        <div class="alert alert-danger" ng-show="insCtrl.errorAlert">
+            <strong>Error!</strong> {{insCtrl.alertMessage}}
+        </div>
+    </div>
 </div>

@@ -45,3 +45,11 @@ body {
 .btn-group.btn-group-full{
   width: 100%;
 }
+
+.ng-invalid.ng-dirty {
+  border-color: #FA787E;
+}
+
+.ng-valid.ng-dirty {
+  border-color: #B2DFDB;
+}

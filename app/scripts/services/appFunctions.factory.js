@@ -1,7 +1,6 @@
 'use strict';
 
 function appFunctions(apiFunctions){
-    var okmsg = false;
     return {
         setSplitterToTransmitter: function(message){
 
@@ -109,10 +108,6 @@ function appFunctions(apiFunctions){
         },
 
         setReceiverToSplitterRTMP: function(){
-            apiFunctions.createFilter(receiverId, "receiver");
-            apiFunctions.configureFilter(receiverId, 'configure', lmsInput.params);
-            apiFunctions.createFilter(decoderId, "videoDecoder");
-            apiFunctions.createFilter(resamplerId, "videoResampler");
             var lmsResampler = {
                 'params'    : {
                     "width":0,
@@ -121,19 +116,19 @@ function appFunctions(apiFunctions){
                     "pixelFormat":0
                 }
             };
-            apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params);
-            apiFunctions.createFilter(videoSplitterId, "videoSplitter");
-            var midFiltersIds = [decoderId,resamplerId];
-            apiFunctions.createPath(lmsInput.params.subsessions[0].port, receiverId, videoSplitterId, lmsInput.params.subsessions[0].port, -1, midFiltersIds);
 
+            apiFunctions.createFilter(receiverId, "receiver");
+            apiFunctions.createFilter(decoderId, "videoDecoder");
+            apiFunctions.createFilter(resamplerId, "videoResampler");
+            apiFunctions.createFilter(videoSplitterId, "videoSplitter");
+            apiFunctions.configureFilter(receiverId, 'configure', lmsInput.params);
+            apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params);
+            var midFiltersIds = [decoderId,resamplerId];
+            apiFunctions.createPath(1935, receiverId, videoSplitterId, 1935, -1, midFiltersIds);
             ++resamplerId;
         },
 
         setReceiverToSplitterRTSP: function(){
-            apiFunctions.createFilter(receiverId, "receiver");
-            apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params);
-            apiFunctions.createFilter(decoderId, "videoDecoder");
-            apiFunctions.createFilter(resamplerId, "videoResampler");
             var lmsResampler = {
                 'params'    : {
                     "width":0,
@@ -142,11 +137,14 @@ function appFunctions(apiFunctions){
                     "pixelFormat":0
                 }
             };
-            apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params);
+            apiFunctions.createFilter(receiverId, "receiver");
+            apiFunctions.createFilter(decoderId, "videoDecoder");
+            apiFunctions.createFilter(resamplerId, "videoResampler");
             apiFunctions.createFilter(videoSplitterId, "videoSplitter");
+            apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params);
+            apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params);
             var midFiltersIds = [decoderId,resamplerId];
-            apiFunctions.createPath(8554, receiverId, videoSplitterId, 8554, -1, midFiltersIds);
-
+            apiFunctions.createPath(lmsInput.params.id, receiverId, videoSplitterId, lmsInput.params.id, -1, midFiltersIds);
             ++resamplerId;
         },
 

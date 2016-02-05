@@ -1,11 +1,9 @@
 'use strict';
 
-function inputController(appFunctions, apiFunctions, $window){
+function inputController(appFunctions, apiFunctions, $window, $timeout){
     var vm = this;
-    vm.connectUri = function(){
-
+    vm.connectUriRTMP = function(){
         if(/^(rtmp):\/\/[^ "]+$/.test(vm.uri)) {
-            console.log(vm.uri);
             lmsInput = {
                 'params': {
                     'uri': vm.uri
@@ -13,8 +11,17 @@ function inputController(appFunctions, apiFunctions, $window){
             };
             appFunctions.setReceiverToSplitterRTMP();
             apiFunctions.createFilter(transmitterId, "transmitter");
-            $window.location.href='#/control';
-        } else if(/^(rtsp):\/\/[^ "]+$/.test(vm.uri)) {
+            vm.successAlert = true;
+            $window.location.href = '#/control';
+        } else {
+            vm.alertMessage = "";
+            vm.errorAlert = true;
+            $timeout(function(){vm.errorAlert = false;},2000);
+        }
+    };
+
+    vm.connectUriRTSP = function(){
+        if(/^(rtsp):\/\/[^ "]+$/.test(vm.uri)) {
             lmsInput = {
                 'params': {
                     "uri": vm.uri,
@@ -24,12 +31,13 @@ function inputController(appFunctions, apiFunctions, $window){
             };
             appFunctions.setReceiverToSplitterRTSP();
             apiFunctions.createFilter(transmitterId, "transmitter");
-            $window.location.href='#/control';
+            vm.successAlert = true;
+            $window.location.href = '#/control';
         } else {
-            lmsInput = null;
+            vm.alertMessage = "";
+            vm.errorAlert = true;
+            $timeout(function(){vm.errorAlert = false;},2000);
         }
-
-
     };
 }
 
