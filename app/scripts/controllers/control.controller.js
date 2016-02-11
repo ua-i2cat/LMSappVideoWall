@@ -2,6 +2,7 @@
 
 function controlController(appFunctions, apiFunctions, $window){
     var vm = this;
+
 }
 
 angular

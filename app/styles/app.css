@@ -5,11 +5,9 @@ html,body {
 
 body {
   font-size:81.25%;
-  margin:0;
+  margin: 5px 5px 5px 5px;
   min-width:400px;
   background: #B2DFDB;
-  /*overflow-x:hidden;
-  overflow-y:scroll*/
 }
 
 .navbar{
@@ -18,6 +16,10 @@ body {
 
 .navbar-brand.nav-title{
   color: #FFFFFF;
+}
+
+.btn-navbar {
+  margin: 8px 0 8px 0;
 }
 
 .viewInstance{
@@ -29,8 +31,8 @@ body {
 }
 
 .input-group{
-  margin: 0px 0px 10px;
-  padding: 0px 15px 0px 15px;
+  margin: 0 0 10px;
+  padding: 0 15px 0 15px;
 }
 
 .input-group-addon.form{

@@ -1,6 +1,6 @@
 'use strict';
 
-function inputRTPController(appFunctions, apiFunctions, $window){
+function inputRTPController(appFunctions, apiFunctions, $window, $timeout, $scope){
     var vm = this;
 
     vm.inputRTPAudioCodec = {
@@ -36,8 +36,27 @@ function inputRTPController(appFunctions, apiFunctions, $window){
     };
 
     vm.audioRTP = function(){
-        console.log(vm);
+        lmsInput = {
+            'params'    : {
+                "subsessions":[
+                    {
+                        "medium":"audio",
+                        "codec":vm.inputRTPAudioCodec.codecSelect,
+                        "bandwidth":192000,
+                        "timeStampFrequency":vm.inputRTPAudioSampleRate.sampleRateSelect,
+                        "channels":vm.inputRTPAudioChannels.channelsSelect,
+                        "port":vm.inputRTPAudioPort
+                    }
+                ]
+            }
+        };
+        apiFunctions.createFilter(receiverId, "receiver");
+        apiFunctions.createFilter(transmitterId, "transmitter");
+        appFunctions.setReceiverToTransmitterAudio('a');
 
+        $scope.mainCtrl.successAlert = true;
+        $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
+        $window.location.href='#/control';
     };
     vm.videoRTP = function(){
         lmsInput = {
@@ -54,13 +73,70 @@ function inputRTPController(appFunctions, apiFunctions, $window){
                 ]
             }
         };
-        apiFunctions.createFilter(receiverId, "receiver");
-        appFunctions.setReceiverToSplitter('v');
-        apiFunctions.createFilter(transmitterId, "transmitter");
-        $window.location.href='#/control';
+
+        appFunctions.initRTP()
+            .then(function succesCallback(){
+                appFunctions.setReceiverToSplitter('v')
+                    .then(function succesCallback(){
+                        $scope.mainCtrl.successAlert = true;
+                        $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
+                        $window.location.href='#/control';
+                    }, function errorCallback(response){
+                        addAlertError(response);
+                    });
+            }, function errorCallback(response){
+                addAlertError(response);
+            });
     };
     vm.bothRTP = function(){
-        console.log(vm);
+        lmsInput = {
+            'audioParams'    : {
+                "subsessions":[
+                    {
+                        "medium":"audio",
+                        "codec":vm.inputRTPAudioCodec.codecSelect,
+                        "bandwidth":192000,
+                        "timeStampFrequency":vm.inputRTPAudioSampleRate.sampleRateSelect,
+                        "channels":vm.inputRTPAudioChannels.channelsSelect,
+                        "port":vm.inputRTPAudioPort
+                    }
+                ]
+            },
+            'videoParams'    : {
+                "subsessions":[
+                    {
+                        "medium":"video",
+                        "codec":vm.inputRTPVideoCodec.codecSelect,
+                        "bandwidth":5000,
+                        "timeStampFrequency":90000,
+                        "channels":null,
+                        "port":vm.inputRTPVideoPort
+                    }
+                ]
+            }
+        };
+        appFunctions.initRTP()
+            .then(function succesCallback(){
+                appFunctions.setReceiverToTransmitterAudio('av')
+                    .then(function succesCallback(){
+                        appFunctions.setReceiverToSplitter('av')
+                            .then(function succesCallback(){
+                                $scope.mainCtrl.successAlert = true;
+                                $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
+                                $window.location.href='#/control';
+                            }, errorCallback(response));
+                    }, errorCallback(response));
+            }, errorCallback(response));
+
+
+    };
+
+    vm.addAlertError = function(response){
+        $scope.mainCtrl.alertMessage = response;
+        $scope.mainCtrl.errorAlert = true;
+        $timeout(function () {
+            $scope.mainCtrl.errorAlert = false;
+        }, 2000);
     };
 
 }

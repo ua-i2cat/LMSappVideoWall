@@ -14,7 +14,7 @@
                 <div class="row">
                     <div class="input-group">
                         <span class="input-group-addon form">RTSP URI</span>
-                        <input class="form-control ng-dirty ng-invalid" type="text" ng-model="inputCtrl.uri" required/>
+                        <input class="form-control ng-dirty ng-invalid" type="text" ng-model="inputCtrl.uri" ng-init="inputCtrl.uri='rtsp://192.168.10.55:8554/'" required/>
                     </div>
                 </div>
                 <br>
@@ -141,15 +141,6 @@
                             <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Set and continue"/>
                         </form>
                     </div>
-                    <br>
-                    <div class="row">
-                        <div class="alert alert-success" ng-show="inputRTPCtrl.successAlert" role="alert">
-                            <strong>Succes!</strong>{{inputRTPCtrl.alertMessage}}
-                        </div>
-                        <div class="alert alert-danger" ng-show="inputCtrl.errorAlert">
-                            <strong>Error!</strong>{{inputRTPCtrl.alertMessage}}
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -166,15 +157,5 @@
                 <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Connect"/>
             </form>
         </div>-->
-    </div>
-    <br>
-    <br>
-    <div class="row">
-        <div class="alert alert-success" ng-show="inputCtrl.successAlert" role="alert">
-            <strong>Succes!</strong>{{inputCtrl.alertMessage}}
-        </div>
-        <div class="alert alert-danger" ng-show="inputCtrl.errorAlert">
-            <strong>Error!</strong>{{inputCtrl.alertMessage}}
-        </div>
     </div>
 </div>

@@ -1,7 +1,8 @@
 'use strict';
 
-function inputController(appFunctions, apiFunctions, $window, $timeout){
+function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
     var vm = this;
+    $scope.mainCtrl.disconnectShow = true;
     vm.connectUriRTMP = function(){
         if(/^(rtmp):\/\/[^ "]+$/.test(vm.uri)) {
             lmsInput = {
@@ -9,14 +10,26 @@ function inputController(appFunctions, apiFunctions, $window, $timeout){
                     'uri': vm.uri
                 }
             };
-            appFunctions.setReceiverToSplitterRTMP();
-            apiFunctions.createFilter(transmitterId, "transmitter");
-            vm.successAlert = true;
-            $window.location.href = '#/control';
+            appFunctions.setReceiverToSplitterRTMP()
+                .then(function succesCallback(){
+                    apiFunctions.createFilter(transmitterId, "transmitter")
+                        .then(function succesCallback(response){
+                            $scope.mainCtrl.alertMessage = response;
+                            $scope.mainCtrl.successAlert = true;
+                            $timeout(function () {
+                                $scope.mainCtrl.successAlert = false;
+                            },1000);
+                            $window.location.href = '#/control';
+                        }, function errorCallback(response) {
+
+                        });
+                }, errorCallback);
+
+
         } else {
-            vm.alertMessage = "";
-            vm.errorAlert = true;
-            $timeout(function(){vm.errorAlert = false;},2000);
+            $scope.mainCtrl.alertMessage = "";
+            $scope.mainCtrl.errorAlert = true;
+            $timeout(function(){$scope.mainCtrl.errorAlert = false;},2000);
         }
     };
 
@@ -29,15 +42,47 @@ function inputController(appFunctions, apiFunctions, $window, $timeout){
                     "id": "8554"
                 }
             };
-            appFunctions.setReceiverToSplitterRTSP();
-            apiFunctions.createFilter(transmitterId, "transmitter");
-            vm.successAlert = true;
-            $window.location.href = '#/control';
+            appFunctions.setReceiverToSplitterRTSP()
+                .then(function succesCallback(response){
+                    console.log(response);
+                    apiFunctions.createFilter(transmitterId, "transmitter")
+                        .then(function succesCallback(response){
+                            $scope.mainCtrl.alertMessage = response;
+                            $scope.mainCtrl.successAlert = true;
+                            $timeout(function () {
+                                $scope.mainCtrl.successAlert = false;
+                            },1000);
+                            $window.location.href = '#/control';
+                        }, function errorCallback(response) {
+                            console.log("Error Api " + response);
+                            $scope.mainCtrl.alertMessage = response;
+                            $scope.mainCtrl.errorAlert = true;
+                            $timeout(function () {
+                                $scope.mainCtrl.errorAlert = false;
+                            }, 2000);
+                        });
+                },  function errorCallback(response) {
+                    console.log("Error app " + response);
+                    $scope.mainCtrl.alertMessage = response;
+                    $scope.mainCtrl.errorAlert = true;
+                    $timeout(function () {
+                        $scope.mainCtrl.errorAlert = false;
+                    }, 2000);
+                });
+
         } else {
-            vm.alertMessage = "";
-            vm.errorAlert = true;
-            $timeout(function(){vm.errorAlert = false;},2000);
+            $scope.mainCtrl.alertMessage = "";
+            $scope.mainCtrl.errorAlert = true;
+            $timeout(function(){$scope.mainCtrl.errorAlert = false;},2000);
         }
+    };
+
+    vm.errorCallback = function(){
+        $scope.mainCtrl.alertMessage = response;
+        $scope.mainCtrl.errorAlert = true;
+        $timeout(function () {
+            $scope.mainCtrl.errorAlert = false;
+        }, 2000);
     };
 }
 

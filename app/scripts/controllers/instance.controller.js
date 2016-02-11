@@ -1,6 +1,6 @@
 'use strict';
 
-function instanceController($http, $window, $timeout){
+function instanceController(apiFunctions, $scope, $timeout, $window){
     var vm = this;
     vm.instance = {};
     vm.connectInstance = function(){
@@ -14,20 +14,22 @@ function instanceController($http, $window, $timeout){
 
         apiUri = 'http://'+ vm.instance.apiHostname +':'+ vm.instance.apiPort +'/api';
 
-        $http({
-            method: 'POST',
-            url: apiUri + '/connect',
-            data: message,
-            headers: {'Content-Type': 'application/json'}
-        }).then(function succesCallback() {
-            vm.successAlert = true;
-            $timeout(function(){vm.successAlert = false;},1000);
+        apiFunctions.connect(message)
+        .then(function succesCallback(response){
+            $scope.mainCtrl.alertMessage = response;
+            $scope.mainCtrl.successAlert = true;
+            $timeout(function () {
+                $scope.mainCtrl.successAlert = false;
+            },1000);
             $window.location.href='#/input';
         }, function errorCallback(response) {
-            vm.alertMessage = response.config.url + " is not available...";
-            vm.errorAlert = true;
-            $timeout(function(){vm.errorAlert = false;},2000);
+            $scope.mainCtrl.alertMessage = response;
+            $scope.mainCtrl.errorAlert = true;
+            $timeout(function () {
+                $scope.mainCtrl.errorAlert = false;
+            }, 2000);
         });
+
     };
 }
 

@@ -27,6 +27,7 @@
   <script src="scripts/services/appFunctions.factory.js"></script>
 
   <!--App CONTROLLERS-->
+  <script src="scripts/controllers/main.controller.js"></script>
   <script src="scripts/controllers/instance.controller.js"></script>
   <script src="scripts/controllers/input.controller.js"></script>
   <script src="scripts/controllers/inputRTP.controller.js"></script>
@@ -34,7 +35,7 @@
   <script src="scripts/controllers/control.controller.js"></script>
 
 </head>
-<body >
+<body ng-controller="mainController as mainCtrl">
   <nav class="navbar">
     <div class="container-fluid">
       <div class="navbar-header">
@@ -48,16 +49,24 @@
       </div>
       <div class="collapse navbar-collapse" id="navbar-collapse-dis">
         <div class="nav navbar-nav navbar-right">
-          <a id="disconnect" href="#" data-bb="confirm" class="btn btn-default btn-navbar hidden"><span class="glyphicon glyphicon-stop"></span> Disconnect</a>
-          <a id="saveConfig" href="#" data-bb="confirm" class="btn btn-default btn-navbar hidden"><span class="glyphicon glyphicon-folder-close"></span> Save</a>
-          <a id="openConfig" href="#" data-bb="confirm" class="btn btn-default btn-navbar hidden" ><span class="glyphicon glyphicon-folder-open"></span> Open</a>
-          <input type="file" id="selector-files" class ="hidden"/>
+          <a data-bb="confirm" class="btn btn-connect btn-navbar" ng-click="mainCtrl.disconnectMain()" ng-show="mainCtrl.disconnectShow"><span class="glyphicon glyphicon-stop"></span> Disconnect</a>
+          <a data-bb="confirm" class="btn btn-connect btn-navbar" ng-click="mainCtrl.save()" ng-show="mainCtrl.saveShow"><span class="glyphicon glyphicon-folder-close"></span> Save</a>
+          <a data-bb="confirm" class="btn btn-connect btn-navbar" ng-click="mainCtrl.open()" ng-show="mainCtrl.openShow"><span class="glyphicon glyphicon-folder-open"></span> Open</a>
         </div>
       </div>
     </div>
   </nav>
   <div class="row">
     <div ng-view></div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-sm-10 col-sm-offset-1 alert alert-success" ng-show="mainCtrl.successAlert" role="alert">
+      <strong>Succes!</strong> {{mainCtrl.alertMessage}}
+    </div>
+    <div class="col-sm-10 col-sm-offset-1 alert alert-danger" ng-show="mainCtrl.errorAlert">
+      <strong>Error!</strong> {{mainCtrl.alertMessage}}
+    </div>
   </div>
 </body>
 </html>
