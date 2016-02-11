@@ -1,6 +1,6 @@
 'use strict';
 
-function inputRTPController(appFunctions, apiFunctions, $window, $timeout, $scope){
+function inputRTPController(appFunctions, $window, $timeout, $scope){
     var vm = this;
 
     vm.inputRTPAudioCodec = {
@@ -50,13 +50,18 @@ function inputRTPController(appFunctions, apiFunctions, $window, $timeout, $scop
                 ]
             }
         };
-        apiFunctions.createFilter(receiverId, "receiver");
-        apiFunctions.createFilter(transmitterId, "transmitter");
-        appFunctions.setReceiverToTransmitterAudio('a');
 
-        $scope.mainCtrl.successAlert = true;
-        $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
-        $window.location.href='#/control';
+        appFunctions.initRTP()
+            .then(function succesCallback(){
+                appFunctions.setRTPAudio('a')
+                    .then(function succesCallback(){
+                        succesRTP();
+                    }, function errorCallback(response){
+                        errorRTP(response);
+                    });
+            }, function errorCallback(response){
+                errorRTP(response);
+            });
     };
     vm.videoRTP = function(){
         lmsInput = {
@@ -76,16 +81,14 @@ function inputRTPController(appFunctions, apiFunctions, $window, $timeout, $scop
 
         appFunctions.initRTP()
             .then(function succesCallback(){
-                appFunctions.setReceiverToSplitter('v')
+                appFunctions.setRTPVideo('v')
                     .then(function succesCallback(){
-                        $scope.mainCtrl.successAlert = true;
-                        $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
-                        $window.location.href='#/control';
+                        succesRTP();
                     }, function errorCallback(response){
-                        addAlertError(response);
+                        errorRTP(response);
                     });
             }, function errorCallback(response){
-                addAlertError(response);
+                errorRTP(response);
             });
     };
     vm.bothRTP = function(){
@@ -117,21 +120,31 @@ function inputRTPController(appFunctions, apiFunctions, $window, $timeout, $scop
         };
         appFunctions.initRTP()
             .then(function succesCallback(){
-                appFunctions.setReceiverToTransmitterAudio('av')
+                appFunctions.setRTPAudio('av')
                     .then(function succesCallback(){
-                        appFunctions.setReceiverToSplitter('av')
+                        appFunctions.setRTPVideo('av')
                             .then(function succesCallback(){
-                                $scope.mainCtrl.successAlert = true;
-                                $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
-                                $window.location.href='#/control';
-                            }, errorCallback(response));
-                    }, errorCallback(response));
-            }, errorCallback(response));
+                                succesRTP();
+                            }, function errorCallback(response){
+                                errorRTP(response);
+                            });
+                    }, function errorCallback(response){
+                        errorRTP(response);
+                    });
+            }, function errorCallback(response){
+                errorRTP(response);
+            });
 
 
     };
 
-    vm.addAlertError = function(response){
+    vm.succesRTP = function(){
+        $scope.mainCtrl.successAlert = true;
+        $timeout(function(){$scope.mainCtrl.successAlert = false;},1000);
+        $window.location.href='#/control';
+    };
+
+    vm.errorRTP = function(response){
         $scope.mainCtrl.alertMessage = response;
         $scope.mainCtrl.errorAlert = true;
         $timeout(function () {

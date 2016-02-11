@@ -4,11 +4,11 @@ function appFunctions(apiFunctions, $q){
 
     var service = {
         setSplitterToTransmitter: setSplitterToTransmitter,
-        setReceiverToSplitter: setReceiverToSplitter,
+        setRTMP: setRTMP,
+        setRTSP: setRTSP,
         initRTP: initRTP,
-        setReceiverToSplitterRTMP: setReceiverToSplitterRTMP,
-        setReceiverToSplitterRTSP: setReceiverToSplitterRTSP,
-        setReceiverToTransmitterAudio: setReceiverToTransmitterAudio
+        setRTPVideo: setRTPVideo,
+        setRTPAudio: setRTPAudio
     };
 
     return service;
@@ -90,6 +90,133 @@ function appFunctions(apiFunctions, $q){
         portRTP = portRTP + 2;
     }
 
+
+
+    function setRTMP(){
+        var deferred = $q.defer(),
+            midFiltersIds = [decoderId,resamplerId],
+            lmsResampler = {
+                'params'    : {
+                    "width":0,
+                    "height":0,
+                    "discartPeriod":0,
+                    "pixelFormat":0
+                }
+            };
+
+        apiFunctions.createFilter(receiverId, "receiver")
+            .then(function succesCallback(){
+                apiFunctions.createFilter(transmitterId, "transmitter")
+                    .then(function succesCallback(){
+                        apiFunctions.createFilter(decoderId, "videoDecoder")
+                            .then(function succesCallback(){
+                                apiFunctions.createFilter(resamplerId, "videoResampler")
+                                    .then(function succesCallback(){
+                                        apiFunctions.createFilter(videoSplitterId, "videoSplitter")
+                                            .then(function succesCallback(){
+                                                apiFunctions.configureFilter(receiverId, 'configure', lmsInput.params)
+                                                    .then(function succesCallback(){
+                                                        apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
+                                                            .then(function succesCallback(response){
+                                                                ++resamplerId;
+                                                                console.log("Return");
+                                                                deferred.resolve(response);
+                                                                /*
+                                                                 apiFunctions.createPath(1935, receiverId, videoSplitterId, 1935, -1, midFiltersIds)
+                                                                     .then(function succesCallback(response){
+                                                                         ++resamplerId;
+                                                                         console.log("Return");
+                                                                         deferred.resolve(response);
+                                                                     }, function errorCallback() {
+                                                                        deferred.reject('No API available.');
+                                                                     });
+                                                                 */
+                                                            }, function errorCallback() {
+                                                                deferred.reject('Api: Error Configure Resampler.');
+                                                            });
+                                                    }, function errorCallback() {
+                                                        deferred.reject('Api: Error Configure Receiver .');
+                                                    });
+                                            }, function errorCallback() {
+                                                deferred.reject('Api: Error Create Splitter.');
+                                            });
+                                    }, function errorCallback() {
+                                        deferred.reject('Api: Error Create Resampler.');
+                                    });
+                            }, function errorCallback() {
+                                deferred.reject('Api: Error Create Decoder.');
+                            });
+                    }, function errorCallback() {
+                        deferred.reject('Api: Error Create Transmitter.');
+                    });
+            }, function errorCallback() {
+                deferred.reject('Api: Error Create Receiver.');
+            });
+        return deferred.promise;
+    }
+
+    function setRTSP(){
+        var deferred = $q.defer(),
+            midFiltersIds = [decoderId,resamplerId],
+            lmsResampler = {
+            'params'    : {
+                "width":0,
+                "height":0,
+                "discartPeriod":0,
+                "pixelFormat":0
+            }
+        };
+        apiFunctions.createFilter(receiverId, "receiver")
+            .then(function succesCallback(){
+                apiFunctions.createFilter(transmitterId, "transmitter")
+                    .then(function succesCallback(){
+                        apiFunctions.createFilter(decoderId, "videoDecoder")
+                            .then(function succesCallback(){
+                                apiFunctions.createFilter(resamplerId, "videoResampler")
+                                    .then(function succesCallback(){
+                                        apiFunctions.createFilter(videoSplitterId, "videoSplitter")
+                                            .then(function succesCallback(){
+                                                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params)
+                                                    .then(function succesCallback(){
+                                                        apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
+                                                            .then(function succesCallback(response){
+                                                                ++resamplerId;
+                                                                console.log("Return");
+                                                                deferred.resolve(response);
+                                                                /*
+                                                                apiFunctions.createPath(lmsInput.params.id, receiverId, videoSplitterId, lmsInput.params.id, -1, midFiltersIds)
+                                                                    .then(function succesCallback(response){
+                                                                        ++resamplerId;
+                                                                        console.log("Return");
+                                                                        deferred.resolve(response);
+                                                                    }, function errorCallback() {
+                                                                        deferred.reject('No API available.');
+                                                                    });
+                                                                */
+                                                            }, function errorCallback() {
+                                                                deferred.reject('Api: Error Configure Resampler.');
+                                                            });
+                                                }, function errorCallback() {
+                                                    deferred.reject('Api: Error Configure Receiver .');
+                                                });
+                                        }, function errorCallback() {
+                                            deferred.reject('Api: Error Create Splitter.');
+                                        });
+                                }, function errorCallback() {
+                                    deferred.reject('Api: Error Create Resampler.');
+                                });
+                        }, function errorCallback() {
+                            deferred.reject('Api: Error Create Decoder.');
+                        });
+                    }, function errorCallback() {
+                        deferred.reject('Api: Error Create Transmitter.');
+                    });
+            }, function errorCallback() {
+                deferred.reject('Api: Error Create Receiver.');
+            });
+        return deferred.promise;
+    }
+
     function initRTP(){
         var deferred = $q.defer();
 
@@ -108,17 +235,17 @@ function appFunctions(apiFunctions, $q){
         return deferred.promise;
     }
 
-    function setReceiverToSplitter(rtpType){
+    function setRTPVideo(rtpType){
         var deferred = $q.defer(),
             midFiltersIds = [decoderId,resamplerId],
             lmsResampler = {
-            'params'    : {
-                "width":0,
-                "height":0,
-                "discartPeriod":0,
-                "pixelFormat":0
-            }
-        };
+                'params'    : {
+                    "width":0,
+                    "height":0,
+                    "discartPeriod":0,
+                    "pixelFormat":0
+                }
+            };
 
         apiFunctions.createFilter(decoderId, "videoDecoder")
             .then(function() {
@@ -174,84 +301,7 @@ function appFunctions(apiFunctions, $q){
         return deferred.promise;
     }
 
-    function setReceiverToSplitterRTMP(){
-        var lmsResampler = {
-            'params'    : {
-                "width":0,
-                "height":0,
-                "discartPeriod":0,
-                "pixelFormat":0
-            }
-        };
-
-        apiFunctions.createFilter(receiverId, "receiver");
-        apiFunctions.createFilter(decoderId, "videoDecoder");
-        apiFunctions.createFilter(resamplerId, "videoResampler");
-        apiFunctions.createFilter(videoSplitterId, "videoSplitter");
-        apiFunctions.configureFilter(receiverId, 'configure', lmsInput.params);
-        apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params);
-        var midFiltersIds = [decoderId,resamplerId];
-        apiFunctions.createPath(1935, receiverId, videoSplitterId, 1935, -1, midFiltersIds);
-        ++resamplerId;
-    }
-
-    function setReceiverToSplitterRTSP(){
-        var deferred = $q.defer(),
-            midFiltersIds = [decoderId,resamplerId],
-            lmsResampler = {
-            'params'    : {
-                "width":0,
-                "height":0,
-                "discartPeriod":0,
-                "pixelFormat":0
-            }
-        };
-        apiFunctions.createFilter(receiverId, "receiver")
-            .then(function succesCallback(){
-                apiFunctions.createFilter(decoderId, "videoDecoder")
-                    .then(function succesCallback(){
-                        apiFunctions.createFilter(resamplerId, "videoResampler")
-                            .then(function succesCallback(){
-                                apiFunctions.createFilter(videoSplitterId, "videoSplitter")
-                                    .then(function succesCallback(){
-                                        apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params)
-                                            .then(function succesCallback(){
-                                                apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
-                                                    .then(function succesCallback(response){
-                                                        ++resamplerId;
-                                                        console.log("Return");
-                                                        deferred.resolve(response);
-                                                        /*
-                                                        apiFunctions.createPath(lmsInput.params.id, receiverId, videoSplitterId, lmsInput.params.id, -1, midFiltersIds)
-                                                            .then(function succesCallback(response){
-                                                                ++resamplerId;
-                                                                console.log("Return");
-                                                                deferred.resolve(response);
-                                                            }, function errorCallback() {
-                                                                deferred.reject('No API available.');
-                                                            });*/
-                                                    }, function errorCallback() {
-                                                        deferred.reject('Api: Error Configure Resampler.');
-                                                    });
-                                        }, function errorCallback() {
-                                            deferred.reject('Api: Error Configure Receiver .');
-                                        });
-                                }, function errorCallback() {
-                                    deferred.reject('Api: Error Create Splitter.');
-                                });
-                        }, function errorCallback() {
-                            deferred.reject('Api: Error Create Resampler.');
-                        });
-                }, function errorCallback() {
-                    deferred.reject('Api: Error Create Decoder.');
-                });
-            }, function errorCallback() {
-                deferred.reject('Api: Error Create Receiver.');
-            });
-        return deferred.promise;
-    }
-
-    function setReceiverToTransmitterAudio(rtpType){
+    function setRTPAudio(rtpType){
 
         var midFiltersIds = [],
             plainrtp,

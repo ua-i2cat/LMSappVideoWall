@@ -2,7 +2,9 @@
 
 function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
     var vm = this;
+
     $scope.mainCtrl.disconnectShow = true;
+
     vm.connectUriRTMP = function(){
         if(/^(rtmp):\/\/[^ "]+$/.test(vm.uri)) {
             lmsInput = {
@@ -10,20 +12,17 @@ function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
                     'uri': vm.uri
                 }
             };
-            appFunctions.setReceiverToSplitterRTMP()
+            appFunctions.setRTMP()
                 .then(function succesCallback(){
-                    apiFunctions.createFilter(transmitterId, "transmitter")
-                        .then(function succesCallback(response){
-                            $scope.mainCtrl.alertMessage = response;
-                            $scope.mainCtrl.successAlert = true;
-                            $timeout(function () {
-                                $scope.mainCtrl.successAlert = false;
-                            },1000);
-                            $window.location.href = '#/control';
-                        }, function errorCallback(response) {
-
-                        });
-                }, errorCallback);
+                    $scope.mainCtrl.alertMessage = response;
+                    $scope.mainCtrl.successAlert = true;
+                    $timeout(function () {
+                        $scope.mainCtrl.successAlert = false;
+                    },1000);
+                    $window.location.href = '#/control';
+                }, function errorCallback(){
+                    errorInput(response);
+                });
 
 
         } else {
@@ -42,32 +41,18 @@ function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
                     "id": "8554"
                 }
             };
-            appFunctions.setReceiverToSplitterRTSP()
+            appFunctions.setRTSP()
                 .then(function succesCallback(response){
                     console.log(response);
-                    apiFunctions.createFilter(transmitterId, "transmitter")
-                        .then(function succesCallback(response){
-                            $scope.mainCtrl.alertMessage = response;
-                            $scope.mainCtrl.successAlert = true;
-                            $timeout(function () {
-                                $scope.mainCtrl.successAlert = false;
-                            },1000);
-                            $window.location.href = '#/control';
-                        }, function errorCallback(response) {
-                            console.log("Error Api " + response);
-                            $scope.mainCtrl.alertMessage = response;
-                            $scope.mainCtrl.errorAlert = true;
-                            $timeout(function () {
-                                $scope.mainCtrl.errorAlert = false;
-                            }, 2000);
-                        });
-                },  function errorCallback(response) {
-                    console.log("Error app " + response);
                     $scope.mainCtrl.alertMessage = response;
-                    $scope.mainCtrl.errorAlert = true;
+                    $scope.mainCtrl.successAlert = true;
                     $timeout(function () {
-                        $scope.mainCtrl.errorAlert = false;
-                    }, 2000);
+                        $scope.mainCtrl.successAlert = false;
+                    },1000);
+                    $window.location.href = '#/control';
+
+                },  function errorCallback(response) {
+                    errorInput(response);
                 });
 
         } else {
@@ -77,7 +62,7 @@ function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
         }
     };
 
-    vm.errorCallback = function(){
+    vm.errorInput = function(response){
         $scope.mainCtrl.alertMessage = response;
         $scope.mainCtrl.errorAlert = true;
         $timeout(function () {
