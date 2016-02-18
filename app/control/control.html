@@ -1,0 +1,51 @@
+<div class="col-sm-8 col-sm-offset-1">
+    <div></div>
+</div>
+<div class="col-sm-2">
+    <h4>Selected Crop</h4>
+    <form name="cropForm">
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-addon form">Crop</span>
+                <select class="form-control" name="codecSelect" ng-model="controlCtrl.listCrops">
+                    <option ng-repeat="crop in controlCtrl.listCrops" value="{{crop.name}}">{{crop.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-addon form">X</span>
+                <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="controlCtrl.xCrop" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-addon form">Y</span>
+                <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="controlCtrl.yCrop" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-addon form">Width</span>
+                <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="controlCtrl.wCrop" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-addon form">Height</span>
+                <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="controlCtrl.hCrop" required/>
+            </div>
+        </div>
+        <input class="btn btn-connect" type="submit" value="Configure Selected Crop"/>
+    </form>
+    <h4>Configure Frame Time</h4>
+    <form name="frameTimeForm">
+        <div class="row">
+            <div class="input-group">
+                <span class="input-group-addon form">Frame Time</span>
+                <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="controlCtrl.frameTime" required/>
+            </div>
+        </div>
+        <input class="btn btn-connect" type="submit" value="Configure Frame Time"/>
+    </form>
+</div>

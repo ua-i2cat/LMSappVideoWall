@@ -1,5 +1,8 @@
 'use strict';
 
+angular
+    .module('video-wall-app',['ngRoute']);
+
 var sHost,
     sPort,
     apiUri,
@@ -25,5 +28,4 @@ var sHost,
     winWidth = 0,
     winHeight = 0;
 
-angular
-    .module('video-wall-app',['ngRoute']);
+

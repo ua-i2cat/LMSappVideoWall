@@ -1,5 +1,9 @@
 'use strict';
 
+angular
+    .module('video-wall-app')
+    .controller('tabController', tabController);
+
 function tabController(){
     var vm = this;
     vm.tab = 1;
@@ -11,7 +15,3 @@ function tabController(){
         return vm.tab === isSet;
     };
 }
-
-angular
-    .module('video-wall-app')
-    .controller('tabController', tabController);

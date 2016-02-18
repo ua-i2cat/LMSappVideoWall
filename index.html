@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>LMS VideoWall</title>
-  <link rel="stylesheet" href="./styles/app.css">
+  <link rel="stylesheet" href="app/styles/app.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 
@@ -19,20 +19,21 @@
   <script src="bower_components/angular-route/angular-route.js"></script>
 
   <!--App fonts-->
-  <script src="scripts/app.module.js"></script>
-  <script src="scripts/app.config.js"></script>
+  <script src="app/app.module.js"></script>
+  <script src="app/app.config.js"></script>
 
   <!--App SERVICES-->
-  <script src="scripts/services/apiFunctions.factory.js"></script>
-  <script src="scripts/services/appFunctions.factory.js"></script>
+  <script src="app/main/apiFunctions.factory.js"></script>
+  <script src="app/main/appFunctions.factory.js"></script>
+  <script src="app/instance/instance.service.js"></script>
 
   <!--App CONTROLLERS-->
-  <script src="scripts/controllers/main.controller.js"></script>
-  <script src="scripts/controllers/instance.controller.js"></script>
-  <script src="scripts/controllers/input.controller.js"></script>
-  <script src="scripts/controllers/inputRTP.controller.js"></script>
-  <script src="scripts/controllers/tab.controller.js"></script>
-  <script src="scripts/controllers/control.controller.js"></script>
+  <script src="app/main/main.controller.js"></script>
+  <script src="app/instance/instance.controller.js"></script>
+  <script src="app/input/input.controller.js"></script>
+  <script src="app/input/inputRTP.controller.js"></script>
+  <script src="app/main/tab.controller.js"></script>
+  <script src="app/control/control.controller.js"></script>
 
 </head>
 <body ng-controller="mainController as mainCtrl">

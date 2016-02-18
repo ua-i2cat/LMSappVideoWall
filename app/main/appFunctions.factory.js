@@ -1,5 +1,9 @@
 'use strict';
 
+angular
+    .module('video-wall-app')
+    .factory('appFunctions', appFunctions);
+
 function appFunctions(apiFunctions, $q){
 
     var service = {
@@ -303,46 +307,73 @@ function appFunctions(apiFunctions, $q){
 
     function setRTPAudio(rtpType){
 
-        var midFiltersIds = [],
+        var deferred = $q.defer(),
+            midFiltersIds = [],
             plainrtp,
             lmsTransmitter;
         switch(rtpType){
             case 'a':
-                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params);
-                apiFunctions.createPath(lmsInput.params.subsessions[0].port, receiverId, transmitterId, lmsInput.params.subsessions[0].port, lmsInput.params.subsessions[0].port, midFiltersIds);
-                plainrtp = "plainrtp" + lmsInput.params.subsessions[0].port;
-                lmsTransmitter = {
-                    'params'    : {
-                        "id":lmsInput.params.subsessions[0].port,
-                        "txFormat":"std",
-                        "name":plainrtp,
-                        "info":plainrtp,
-                        "desc":plainrtp,
-                        "readers":[lmsInput.params.subsessions[0].port]
-                    }
-                };
+                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params)
+                    .then(function(){
+                        plainrtp = "plainrtp" + lmsInput.params.subsessions[0].port;
+                        lmsTransmitter = {
+                            'params'    : {
+                                "id":lmsInput.params.subsessions[0].port,
+                                "txFormat":"std",
+                                "name":plainrtp,
+                                "info":plainrtp,
+                                "desc":plainrtp,
+                                "readers":[lmsInput.params.subsessions[0].port]
+                            }
+                        };
+                        apiFunctions.createPath(lmsInput.params.subsessions[0].port, receiverId, transmitterId, lmsInput.params.subsessions[0].port, lmsInput.params.subsessions[0].port, midFiltersIds)
+                            .then(function(){
+                                apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params)
+                                    .then(function(response){
+                                        ++encoderId;
+                                        deferred.resolve(response);
+                                    }, function errorCallback(){
+                                        deferred.reject('Api: Error Configure Transmitter.');
+                                    });
+                            }, function errorCallback(){
+                                deferred.reject('Api: Error Crate Path.');
+                            });
+                    }, function errorCallback(){
+                        deferred.reject('Api: Error Configure Receiver.');
+                    });
                 break;
             case 'av':
-                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.audioParams);
-                apiFunctions.createPath(lmsInput.audioParams.subsessions[0].port, receiverId, transmitterId, lmsInput.audioParams.subsessions[0].port, lmsInput.audioParams.subsessions[0].port, midFiltersIds);
-                plainrtp = "plainrtp" + lmsInput.audioParams.subsessions[0].port;
-                lmsTransmitter = {
-                    'params'    : {
-                        "id":lmsInput.audioParams.subsessions[0].port,
-                        "txFormat":"std",
-                        "name":plainrtp,
-                        "info":plainrtp,
-                        "desc":plainrtp,
-                        "readers":[lmsInput.audioParams.subsessions[0].port]
-                    }
-                };
+                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.audioParams)
+                    .then(function(){
+                        plainrtp = "plainrtp" + lmsInput.audioParams.subsessions[0].port;
+                        lmsTransmitter = {
+                            'params'    : {
+                                "id":lmsInput.audioParams.subsessions[0].port,
+                                "txFormat":"std",
+                                "name":plainrtp,
+                                "info":plainrtp,
+                                "desc":plainrtp,
+                                "readers":[lmsInput.audioParams.subsessions[0].port]
+                            }
+                        };
+                        apiFunctions.createPath(lmsInput.audioParams.subsessions[0].port, receiverId, transmitterId, lmsInput.audioParams.subsessions[0].port, lmsInput.audioParams.subsessions[0].port, midFiltersIds)
+                            .then(function(){
+                                apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params)
+                                    .then(function(response){
+                                        ++encoderId;
+                                        deferred.resolve(response);
+                                    }, function errorCallback(){
+                                        deferred.reject('Api: Error Configure Transmitter.');
+                                    });
+                            }, function errorCallback(){
+                                deferred.reject('Api: Error Crate Path.');
+                            });
+                    }, function errorCallback(){
+                        deferred.reject('Api: Error Configure Receiver.');
+                    });
                 break;
         }
         apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params);
         ++encoderId;
     }
 }
-
-angular
-    .module('video-wall-app')
-    .factory('appFunctions', appFunctions);

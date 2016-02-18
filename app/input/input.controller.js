@@ -1,6 +1,10 @@
 'use strict';
 
-function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
+angular
+    .module('video-wall-app')
+    .controller('inputController', inputController);
+
+function inputController(appFunctions, $window, $timeout, $scope){
     var vm = this;
 
     $scope.mainCtrl.disconnectShow = true;
@@ -71,6 +75,3 @@ function inputController(appFunctions, apiFunctions, $window, $timeout, $scope){
     };
 }
 
-angular
-    .module('video-wall-app')
-    .controller('inputController', inputController);

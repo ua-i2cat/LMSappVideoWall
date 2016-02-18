@@ -1,7 +1,14 @@
 'use strict';
 
+angular
+    .module('video-wall-app')
+    .controller('mainController', mainController);
+
 function mainController(apiFunctions, $window, $scope, $timeout){
     var vm = this;
+    angular
+        .module('video-wall-app')
+        .controller('mainController', mainController);
 
     vm.disconnectMain = function(){
         apiFunctions.disconnect()
@@ -37,7 +44,3 @@ function mainController(apiFunctions, $window, $scope, $timeout){
     };
 
 }
-
-angular
-    .module('video-wall-app')
-    .controller('mainController', mainController);

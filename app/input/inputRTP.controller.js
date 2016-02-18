@@ -1,5 +1,9 @@
 'use strict';
 
+angular
+    .module('video-wall-app')
+    .controller('inputRTPController', inputRTPController);
+
 function inputRTPController(appFunctions, $window, $timeout, $scope){
     var vm = this;
 
@@ -154,6 +158,3 @@ function inputRTPController(appFunctions, $window, $timeout, $scope){
 
 }
 
-angular
-    .module('video-wall-app')
-    .controller('inputRTPController', inputRTPController);

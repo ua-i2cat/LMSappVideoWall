@@ -1,5 +1,9 @@
 'use strict';
 
+angular
+    .module('video-wall-app')
+    .factory('apiFunctions', apiFunctions);
+
 function apiFunctions($http, $q) {
 
     var service = {
@@ -116,6 +120,3 @@ function apiFunctions($http, $q) {
     }
 }
 
-angular
-    .module('video-wall-app')
-    .factory('apiFunctions', apiFunctions);
