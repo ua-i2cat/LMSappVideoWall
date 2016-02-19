@@ -6,9 +6,6 @@ angular
 
 function mainController(apiFunctions, $window, $scope, $timeout){
     var vm = this;
-    angular
-        .module('video-wall-app')
-        .controller('mainController', mainController);
 
     vm.disconnectMain = function(){
         apiFunctions.disconnect()
@@ -19,17 +16,17 @@ function mainController(apiFunctions, $window, $scope, $timeout){
             apiUri = null;
             sHost = null;
             sPort = null;
-            $scope.mainCtrl.alertMessage = response;
-            $scope.mainCtrl.successAlert = true;
+            vm.alertMessage = response;
+            vm.successAlert = true;
             $timeout(function () {
-                $scope.mainCtrl.successAlert = false;
+                $scope.successAlert = false;
             },1000);
             $window.location.href='/';
         }, function errorCallback(response){
-            $scope.mainCtrl.alertMessage = response;
-            $scope.mainCtrl.errorAlert = true;
+            vm.alertMessage = response;
+            vm.errorAlert = true;
             $timeout(function () {
-                $scope.mainCtrl.errorAlert = false;
+                vm.errorAlert = false;
             }, 2000);
         });
 
@@ -41,6 +38,28 @@ function mainController(apiFunctions, $window, $scope, $timeout){
 
     vm.open = function(){
         console.log("open");
+    };
+
+    $scope.$on('msg', function(evt,msg){
+        if (msg.state){
+            vm.succesMain();
+        } else {
+            vm.errorMain(msg.response);
+        }
+    });
+
+    vm.succesMain = function(){
+        vm.successAlert = true;
+        $timeout(function(){vm.successAlert = false;},1000);
+        $window.location.href='#/control';
+    };
+
+    vm.errorMain = function(message){
+        vm.alertMessage = message;
+        vm.errorAlert = true;
+        $timeout(function () {
+            vm.errorAlert = false;
+        }, 2000);
     };
 
 }

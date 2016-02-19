@@ -373,7 +373,6 @@ function appFunctions(apiFunctions, $q){
                     });
                 break;
         }
-        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params);
-        ++encoderId;
+        return deferred.promise;
     }
 }

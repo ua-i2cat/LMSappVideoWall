@@ -55,3 +55,10 @@ body {
 .ng-valid.ng-dirty {
   border-color: #B2DFDB;
 }
+
+.grid-snap {
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  font-size: 1.2em;
+}

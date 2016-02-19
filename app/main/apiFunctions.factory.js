@@ -106,17 +106,29 @@ function apiFunctions($http, $q) {
     }
 
     function succesCallback(response) {
+        var msg;
         if (!response.data.error) {
-            return response.data.message;
+            msg = {
+                'response': response.data.message,
+                'state': true
+            };
+            return msg;
         } else {
-
-            return $q.reject(response.data.error);
+            msg = {
+                'response': response.data.error,
+                'state': false
+            };
+            return $q.reject(msg);
         }
 
     }
 
     function errorCallback() {
-        return $q.reject('No API available.');
+        var msg = {
+            'response': 'No API available.',
+            'state': false
+        };
+        return $q.reject(msg);
     }
 }
 

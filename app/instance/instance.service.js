@@ -2,18 +2,18 @@
 
 angular
     .module('video-wall-app')
-    .factory('instanceService', instanceService);
+    .service('instanceService', instanceService);
 
 function instanceService(apiFunctions, $q){
 
-    var service = {
-        connect: connect
-    };
+    this.connect = connect;
 
-    return service;
-
-    function connect(message){
-        var deferred = $q.defer();
+    function connect(){
+        var deferred = $q.defer(),
+            message = {
+                'host' : sHost,
+                'port' : sPort
+            };
 
         apiFunctions.connect(message)
             .then(function succesCallback(response){
@@ -23,6 +23,5 @@ function instanceService(apiFunctions, $q){
             });
 
         return deferred.promise;
-
     }
 }

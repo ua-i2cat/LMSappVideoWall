@@ -4,74 +4,34 @@ angular
     .module('video-wall-app')
     .controller('inputController', inputController);
 
-function inputController(appFunctions, $window, $timeout, $scope){
+function inputController(inputService, $window, $scope){
     var vm = this;
 
     $scope.mainCtrl.disconnectShow = true;
 
     vm.connectUriRTMP = function(){
-        if(/^(rtmp):\/\/[^ "]+$/.test(vm.uri)) {
-            lmsInput = {
-                'params': {
-                    'uri': vm.uri
-                }
-            };
-            appFunctions.setRTMP()
-                .then(function succesCallback(){
-                    $scope.mainCtrl.alertMessage = response;
-                    $scope.mainCtrl.successAlert = true;
-                    $timeout(function () {
-                        $scope.mainCtrl.successAlert = false;
-                    },1000);
-                    $window.location.href = '#/control';
-                }, function errorCallback(){
-                    errorInput(response);
-                });
+        inputService.connectUriRTMP()
+            .then(function succesCallback(response) {
+                $scope.$parent.$broadcast('msg', response);
+                $window.location.href = '#/control';
+            })
+            .catch(function errorCallback(response) {
+                $scope.$parent.$broadcast('msg', response);
 
+            });
 
-        } else {
-            $scope.mainCtrl.alertMessage = "";
-            $scope.mainCtrl.errorAlert = true;
-            $timeout(function(){$scope.mainCtrl.errorAlert = false;},2000);
-        }
     };
 
     vm.connectUriRTSP = function(){
-        if(/^(rtsp):\/\/[^ "]+$/.test(vm.uri)) {
-            lmsInput = {
-                'params': {
-                    "uri": vm.uri,
-                    "progName": "LiveMediaStreamer",
-                    "id": "8554"
-                }
-            };
-            appFunctions.setRTSP()
-                .then(function succesCallback(response){
-                    console.log(response);
-                    $scope.mainCtrl.alertMessage = response;
-                    $scope.mainCtrl.successAlert = true;
-                    $timeout(function () {
-                        $scope.mainCtrl.successAlert = false;
-                    },1000);
-                    $window.location.href = '#/control';
+        inputService.connectUriRTSP()
+            .then(function succesCallback(response) {
+                $scope.$parent.$broadcast('msg', response);
+                $window.location.href = '#/control';
+            })
+            .catch(function errorCallback(response) {
+                $scope.$parent.$broadcast('msg', response);
 
-                },  function errorCallback(response) {
-                    errorInput(response);
-                });
-
-        } else {
-            $scope.mainCtrl.alertMessage = "";
-            $scope.mainCtrl.errorAlert = true;
-            $timeout(function(){$scope.mainCtrl.errorAlert = false;},2000);
-        }
-    };
-
-    vm.errorInput = function(response){
-        $scope.mainCtrl.alertMessage = response;
-        $scope.mainCtrl.errorAlert = true;
-        $timeout(function () {
-            $scope.mainCtrl.errorAlert = false;
-        }, 2000);
+            });
     };
 }
 
