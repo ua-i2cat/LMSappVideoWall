@@ -1,5 +1,3 @@
-'use explicit'
-
 angular
     .module('video-wall-app')
     .directive('gridDirective', gridDirective);
@@ -7,7 +5,9 @@ angular
 function gridDirective() {
     var directive = {
         restrict: 'E',
-        template: '<div class="grid-snap"></div>'
+        controller: 'gridController',
+        controllerAs: 'gridCtrl',
+        templateUrl: '/app/control/gridTemplate.html'
     };
 
     return directive;

@@ -4,7 +4,7 @@ angular
     .module('video-wall-app')
     .factory('appFunctions', appFunctions);
 
-function appFunctions(apiFunctions, $q){
+function appFunctions(apiFunctions, $q, $http){
 
     var service = {
         setSplitterToTransmitter: setSplitterToTransmitter,
@@ -183,40 +183,57 @@ function appFunctions(apiFunctions, $q){
                                                 apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params)
                                                     .then(function succesCallback(){
                                                         apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
-                                                            .then(function succesCallback(response){
-                                                                ++resamplerId;
-                                                                console.log("Return");
-                                                                deferred.resolve(response);
-                                                                /*
-                                                                apiFunctions.createPath(lmsInput.params.id, receiverId, videoSplitterId, lmsInput.params.id, -1, midFiltersIds)
-                                                                    .then(function succesCallback(response){
-                                                                        ++resamplerId;
-                                                                        console.log("Return");
-                                                                        deferred.resolve(response);
+                                                            .then(function succesCallback(){
+                                                                resolveState()
+                                                                    .then(function succesCallback(){
+                                                                        apiFunctions.createPath(lmsState.filters[0].sessions[0].subsessions[0].port, receiverId, videoSplitterId, lmsState.filters[0].sessions[0].subsessions[0].port, -1, midFiltersIds)
+                                                                            .then(function succesCallback(response){
+                                                                                ++resamplerId;
+                                                                                deferred.resolve(response);
+                                                                            }, function errorCallback() {
+                                                                                deferred.reject({'response': 'Api: Error Create Path.', 'state': false});
+                                                                            });
                                                                     }, function errorCallback() {
-                                                                        deferred.reject('No API available.');
+                                                                        deferred.reject({'response': 'Api: Error sessions availables.', 'state': false});
                                                                     });
-                                                                */
                                                             }, function errorCallback() {
-                                                                deferred.reject('Api: Error Configure Resampler.');
+                                                                deferred.reject({'response': 'Api: Error Configure Resampler.', 'state': false});
                                                             });
                                                 }, function errorCallback() {
-                                                    deferred.reject('Api: Error Configure Receiver .');
+                                                    deferred.reject({'response': 'Api: Error Configure Receiver .', 'state': false});
                                                 });
                                         }, function errorCallback() {
-                                            deferred.reject('Api: Error Create Splitter.');
+                                            deferred.reject({'response': 'Api: Error Create Splitter.', 'state': false});
                                         });
                                 }, function errorCallback() {
-                                    deferred.reject('Api: Error Create Resampler.');
+                                    deferred.reject({'response': 'Api: Error Create Resampler.', 'state': false});
                                 });
                         }, function errorCallback() {
-                            deferred.reject('Api: Error Create Decoder.');
+                            deferred.reject({'response': 'Api: Error Create Decoder.', 'state': false});
                         });
                     }, function errorCallback() {
-                        deferred.reject('Api: Error Create Transmitter.');
+                        deferred.reject({'response': 'Api: Error Create Transmitter.', 'state': false});
                     });
             }, function errorCallback() {
-                deferred.reject('Api: Error Create Receiver.');
+                deferred.reject({'response': 'Api: Error Create Receiver.', 'state': false});
+            });
+        return deferred.promise;
+    }
+
+    function resolveState(){
+        var deferred = $q.defer();
+        apiFunctions.getState()
+            .then(function succesCallback(){
+                if (lmsState.filters[0].sessions.length == 0){
+                    resolveState()
+                        .then(function succesCallback(){
+                            deferred.resolve({'response': 'OK', 'state': true});
+                        })
+                } else {
+                    deferred.resolve({'response': 'OK', 'state': true});
+                }
+            }, function errorCallback() {
+                deferred.reject({'response': 'Api: Error sessions availables.', 'state': false});
             });
         return deferred.promise;
     }

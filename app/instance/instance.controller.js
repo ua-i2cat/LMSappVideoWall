@@ -6,8 +6,10 @@ angular
 
 function instanceController($scope, $window, instanceService){
     var vm = this;
+    vm.connectInstance = connectInstance;
 
-    vm.connectInstance = function() {
+
+    function connectInstance() {
         sHost = vm.serverHostname;
         sPort = vm.serverPort;
         apiUri = 'http://'+ vm.apiHostname +':'+ vm.apiPort +'/api';
@@ -20,5 +22,5 @@ function instanceController($scope, $window, instanceService){
             .catch(function errorCallback(response) {
                     $scope.$parent.$broadcast('msg', response);
             });
-    };
+    }
 }

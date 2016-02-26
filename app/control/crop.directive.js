@@ -1,5 +1,3 @@
-'use explicit'
-
 angular
     .module('video-wall-app')
     .directive('cropDirective', cropDirective);
@@ -7,7 +5,9 @@ angular
 function cropDirective(){
     var directive = {
         restrict: 'E',
-        template: '<div class="crop"></div>'
+        controller: 'cropController',
+        controllerAs: 'cropCtrl',
+        template: '<div class="outputCrop" ng-style="cropCtrl.myStyle"></div>'
     };
 
     return directive;

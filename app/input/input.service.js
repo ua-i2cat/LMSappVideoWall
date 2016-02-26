@@ -26,8 +26,9 @@ function inputService(appFunctions, $q){
                     deferred.reject(response);
                 });
         } else {
-            deferred.reject(response);
+            deferred.reject("Format of URI incorrect");
         }
+        return deferred.promise;
     }
 
     function connectUriRTSP(uri){
@@ -37,7 +38,7 @@ function inputService(appFunctions, $q){
                 'params': {
                     "uri": uri,
                     "progName": "LiveMediaStreamer",
-                    "id": "8554"
+                    "id": "100"
                 }
             };
             appFunctions.setRTSP()
@@ -47,8 +48,9 @@ function inputService(appFunctions, $q){
                     deferred.reject(response);
                 });
         } else {
-            deferred.reject(response);
+            deferred.reject("Format of URI incorrect");
         }
+        return deferred.promise;
     }
 }
 

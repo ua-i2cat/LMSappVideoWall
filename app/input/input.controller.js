@@ -9,8 +9,11 @@ function inputController(inputService, $window, $scope){
 
     $scope.mainCtrl.disconnectShow = true;
 
-    vm.connectUriRTMP = function(){
-        inputService.connectUriRTMP()
+    vm.connectUriRTMP = connectUriRTMP;
+    vm.connectUriRTSP = connectUriRTSP;
+
+    function connectUriRTMP(){
+        inputService.connectUriRTMP(vm.uri)
             .then(function succesCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
                 $window.location.href = '#/control';
@@ -20,10 +23,10 @@ function inputController(inputService, $window, $scope){
 
             });
 
-    };
+    }
 
-    vm.connectUriRTSP = function(){
-        inputService.connectUriRTSP()
+    function connectUriRTSP(){
+        inputService.connectUriRTSP(vm.uri)
             .then(function succesCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
                 $window.location.href = '#/control';

@@ -61,4 +61,12 @@ body {
   background-color: #000;
   color: #fff;
   font-size: 1.2em;
+  margin: 5px 0 5px 0;
+}
+
+.outputCrop{
+  position: absolute;
+  background-color: #009688;
+  border: solid 1px #fff;
+  z-index: 0;
 }

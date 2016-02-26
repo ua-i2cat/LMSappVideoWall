@@ -81,7 +81,29 @@ function apiFunctions($http, $q) {
             method: 'GET',
             url: uri,
             headers: {'Content-Type': 'application/json; charset=utf-8'}
-        }).then(succesCallback, errorCallback);
+        }).then(function succesCallback(response){
+            var msg;
+            if (!response.data.error) {
+                msg = {
+                    'response': response.data.message,
+                    'state': true
+                };
+                lmsState = response.data.message;
+                return msg;
+            } else {
+                msg = {
+                    'response': response.data.error,
+                    'state': false
+                };
+                return $q.reject(msg);
+            }
+        }, function errorCallback(){
+            var msg = {
+                'response': 'No API available.',
+                'state': false
+            };
+            return $q.reject(msg);
+        });
     }
 
     function connect(message){
