@@ -4,7 +4,7 @@ angular
     .module('video-wall-app')
     .factory('appFunctions', appFunctions);
 
-function appFunctions(apiFunctions, $q, $http){
+function appFunctions(apiFunctions, $q){
 
     var service = {
         setSplitterToTransmitter: setSplitterToTransmitter,
@@ -18,80 +18,90 @@ function appFunctions(apiFunctions, $q, $http){
     return service;
 
     function setSplitterToTransmitter(message){
+        var deferred = $q.defer(),
+            midFiltersIds = [resamplerId, encoderId],
+            plainrtp = "plainrtp" + idCrops,
+            lmsResampler = {
+                'params'    : {
+                    "width": 0,
+                    "height": 0,
+                    "discartPeriod":0,
+                    "pixelFormat":2
+                }
+            },
+            lmsEncoder = {
+                'params'    : {
+                    "bitrate":1000,
+                    "fps":25,
+                    "gop":25,
+                    "lookahead":0,
+                    "threads":4,
+                    "annexb":true,
+                    "preset":"superfast"
+                }
+            },
+            lmsSplitter = {
+                'params'    : {
+                    "id": Number(message.id),
+                    "width": Number(message.width),
+                    "height":Number(message.height),
+                    "x":Number(message.x),
+                    "y":Number(message.y)
+                }
+            },
+            lmsTransmitter = {
+                'params'    : {
+                    "id":idCrops,
+                    "txFormat":"std",
+                    "name":plainrtp,
+                    "info":plainrtp,
+                    "desc":plainrtp,
+                    "readers":[idCrops]
+                }
+            };
 
-        //CREATE RESAMPLER
-        apiFunctions.createFilter(resamplerId, "videoResampler");
-        var lmsResampler = {
-            'params'    : {
-                "width": 0,
-                "height": 0,
-                "discartPeriod":0,
-                "pixelFormat":2
-            }
-        };
-        apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params);
-
-        //CREATE ENCODER
-        apiFunctions.createFilter(encoderId, "videoEncoder");
-        var lmsEncoder = {
-            'params'    : {
-                "bitrate":1000,
-                "fps":25,
-                "gop":25,
-                "lookahead":0,
-                "threads":4,
-                "annexb":true,
-                "preset":"superfast"
-            }
-        };
-        apiFunctions.configureFilter(encoderId, "configure", lmsEncoder.params);
-
-        //CREATE PATH
-        var midFiltersIds = [resamplerId, encoderId];
-        apiFunctions.createPath(pathTransmitterId, videoSplitterId, transmitterId, idCrops, idCrops, midFiltersIds);
-
-        //CONFIGURE CROP
-        var object = listCrops.filter(function(element) {return element.id == idCrops})[0];
-
-
-        var lmsSplitter = {
-            'params'    : {
-                "id": Number(object.id),
-                "width": Number(object.width),
-                "height":Number(object.height),
-                "x":Number(object.x),
-                "y":Number(object.y)
-            }
-        };
-        apiFunctions.configureFilter(videoSplitterId, "configCrop", lmsSplitter.params);
-        //CONFIGURE TRANSMITTER RTSP
-        var plainrtp = "plainrtp" + idCrops;
-        var lmsTransmitter = {
-            'params'    : {
-                "id":idCrops,
-                "txFormat":"std",
-                "name":plainrtp,
-                "info":plainrtp,
-                "desc":plainrtp,
-                "readers":[idCrops]
-            }
-        };
-        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params);
-        //CONFIGURE TRANSMITTER RTP
-        /*lmsTransmitter = {
-         'params'    : {
-         "id":idCrops*100,
-         "txFormat":"std",
-         "ip":message.ip,
-         "port":portRTP,
-         "readers":[idCrops]
-         }
-         };
-         configureFilter(transmitterId, "addRTPConnection", lmsTransmitter.params);*/
-        ++pathTransmitterId;
-        ++resamplerId;
-        ++encoderId;
-        portRTP = portRTP + 2;
+        apiFunctions.createFilter(resamplerId, "videoResampler")
+            .then(function succesCallback(){
+                apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
+                    .then(function succesCallback(){
+                        ++resamplerId;
+                        apiFunctions.createFilter(encoderId, "videoEncoder")
+                            .then(function succesCallback(){
+                                apiFunctions.configureFilter(encoderId, "configure", lmsEncoder.params)
+                                    .then(function succesCallback(){
+                                        ++encoderId;
+                                        apiFunctions.createPath(pathTransmitterId, videoSplitterId, transmitterId, idCrops, idCrops, midFiltersIds)
+                                            .then(function succesCallback(){
+                                                ++pathTransmitterId;
+                                                apiFunctions.configureFilter(videoSplitterId, "configCrop", lmsSplitter.params)
+                                                    .then(function succesCallback(){
+                                                        ++idCrops;
+                                                        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params)
+                                                            .then(function succesCallback(response) {
+                                                                portRTP = portRTP + 2;
+                                                                deferred.resolve(response);
+                                                            }, function errorCallback() {
+                                                                deferred.reject({'response': 'Api: Error Add Connection.', 'state': false});
+                                                            });
+                                                    }, function errorCallback() {
+                                                        deferred.reject({'response': 'Api: Error Configure Crop.', 'state': false});
+                                                    });
+                                            }, function errorCallback() {
+                                                deferred.reject({'response': 'Api: Error Create Path.', 'state': false});
+                                            });
+                                    }, function errorCallback() {
+                                        deferred.reject({'response': 'Api: Error Configure Encoder.', 'state': false});
+                                    });
+                            }, function errorCallback() {
+                                deferred.reject({'response': 'Api: Error Create Encoder.', 'state': false});
+                            });
+                    }, function errorCallback() {
+                        deferred.reject({'response': 'Api: Error Configure Resampler.', 'state': false});
+                    });
+            }, function errorCallback() {
+                deferred.reject({'response': 'Api: Error Create Resampler.', 'state': false});
+            });
+        return deferred.promise;
     }
 
 
@@ -184,11 +194,11 @@ function appFunctions(apiFunctions, $q, $http){
                                                     .then(function succesCallback(){
                                                         apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
                                                             .then(function succesCallback(){
+                                                                ++resamplerId;
                                                                 resolveState()
                                                                     .then(function succesCallback(){
                                                                         apiFunctions.createPath(lmsState.filters[0].sessions[0].subsessions[0].port, receiverId, videoSplitterId, lmsState.filters[0].sessions[0].subsessions[0].port, -1, midFiltersIds)
                                                                             .then(function succesCallback(response){
-                                                                                ++resamplerId;
                                                                                 deferred.resolve(response);
                                                                             }, function errorCallback() {
                                                                                 deferred.reject({'response': 'Api: Error Create Path.', 'state': false});
@@ -274,6 +284,7 @@ function appFunctions(apiFunctions, $q, $http){
                     .then(function() {
                         apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
                             .then(function() {
+                                ++resamplerId;
                                 apiFunctions.createFilter(videoSplitterId, "videoSplitter")
                                     .then(function() {
                                         switch (rtpType) {
@@ -282,7 +293,6 @@ function appFunctions(apiFunctions, $q, $http){
                                                     .then(function(){
                                                         apiFunctions.createPath(lmsInput.params.subsessions[0].port, receiverId, videoSplitterId, lmsInput.params.subsessions[0].port, -1, midFiltersIds)
                                                             .then(function(response){
-                                                                ++resamplerId;
                                                                 deferred.resolve(response);
                                                             }, function errorCallback(){
                                                                 deferred.reject('Api: Error Create Path.');
@@ -296,7 +306,6 @@ function appFunctions(apiFunctions, $q, $http){
                                                     .then(function(){
                                                         apiFunctions.createPath(lmsInput.videoParams.subsessions[0].port, receiverId, videoSplitterId, lmsInput.videoParams.subsessions[0].port, -1, midFiltersIds)
                                                             .then(function(response){
-                                                                ++resamplerId;
                                                                 deferred.resolve(response);
                                                             }, function errorCallback(){
                                                                 deferred.reject('Api: Error Create Path.');

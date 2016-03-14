@@ -35,6 +35,6 @@ function inputController(inputService, $window, $scope){
                 $scope.$parent.$broadcast('msg', response);
 
             });
-    };
+    }
 }
 

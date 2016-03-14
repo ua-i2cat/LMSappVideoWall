@@ -4,7 +4,7 @@ angular
     .module('video-wall-app')
     .config(config);
 
-function config($routeProvider){
+function config($routeProvider, ngDialogProvider){
     $routeProvider
         .when('/',{
             templateUrl: '/app/instance/instance.html',
@@ -24,6 +24,18 @@ function config($routeProvider){
         .otherwise({
             redirectTo: '/'
         });
+
+    ngDialogProvider.setDefaults({
+        className: 'ngdialog-theme-default',
+        plain: false,
+        showClose: true,
+        closeByDocument: true,
+        closeByEscape: true,
+        appendTo: false,
+        preCloseCallback: function () {
+            console.log('default pre-close callback');
+        }
+    });
 }
 
 

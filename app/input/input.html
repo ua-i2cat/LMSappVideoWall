@@ -3,36 +3,43 @@
     <div class="tab" ng-controller="tabController as tabCtrl">
         <br>
         <div class="btn-group btn-group-full">
-            <button ng-class="{ active: tabCtrl.isSet(1) }" class="btn btn-connect" ng-click="tabCtrl.setTab(1)">RTSP</button>
-            <button ng-class="{ active: tabCtrl.isSet(2) }" class="btn btn-connect" ng-click="tabCtrl.setTab(2)">RTP</button>
+            <button ng-class="{ active: tabCtrl.isSet(1) }" class="btn btn-connect" ng-click="tabCtrl.setTab(1)">RTP</button>
+            <button ng-class="{ active: tabCtrl.isSet(2) }" class="btn btn-connect" ng-click="tabCtrl.setTab(2)">RTSP</button>
             <!--<button ng-class="{ active: tabCtrl.isSet(3) }" class="btn btn-connect" ng-click="tabCtrl.setTab(3)">RTMP</button>-->
         </div>
 
         <div ng-show="tabCtrl.isSet(1)">
-            <br>
-             <form name="inputRTSPForm" ng-submit="inputRTSPForm.$valid && inputCtrl.connectUriRTSP()" novalidate>
-                <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon form">RTSP URI</span>
-                        <input class="form-control ng-dirty ng-invalid" type="text" ng-model="inputCtrl.uri" ng-init="inputCtrl.uri='rtsp://192.168.10.55:8554/'" required/>
-                    </div>
-                </div>
-                <br>
-                <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Connect"/>
-            </form>
-        </div>
-
-        <div ng-show="tabCtrl.isSet(2)">
             <div class="tab" ng-controller="tabController as tabCtrlRTP">
                 <br>
                 <div class="btn-group btn-group-full">
-                    <button ng-class="{ active: tabCtrlRTP.isSet(1) }" class="btn btn-connect" ng-click="tabCtrlRTP.setTab(1)">Audio</button>
-                    <button ng-class="{ active: tabCtrlRTP.isSet(2) }" class="btn btn-connect" ng-click="tabCtrlRTP.setTab(2)">Video</button>
+                    <button ng-class="{ active: tabCtrlRTP.isSet(1) }" class="btn btn-connect" ng-click="tabCtrlRTP.setTab(1)">Video</button>
+                    <button ng-class="{ active: tabCtrlRTP.isSet(2) }" class="btn btn-connect" ng-click="tabCtrlRTP.setTab(2)">Audio</button>
                     <button ng-class="{ active: tabCtrlRTP.isSet(3) }" class="btn btn-connect" ng-click="tabCtrlRTP.setTab(3)">Both</button>
                 </div>
 
                 <div ng-controller="inputRTPController as inputRTPCtrl">
                     <div ng-show="tabCtrlRTP.isSet(1)">
+                        <form name="inputRTPVideoForm" ng-submit="inputRTPVideoForm.$valid && inputRTPCtrl.videoRTP()" novalidate>
+                            <h4>Set video input</h4>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Video port</span>
+                                    <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="inputRTPCtrl.inputRTPVideoPort" ng-init="inputRTPCtrl.inputRTPVideoPort=5004" required/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="input-group">
+                                    <span class="input-group-addon form">Codec</span>
+                                    <select class="form-control ng-dirty ng-invalid" name="codecSelect" ng-model="inputRTPCtrl.inputRTPVideoCodec.codecSelect" required>
+                                        <option ng-repeat="codec in inputRTPCtrl.inputRTPVideoCodec.availableCodecs" value="{{codec.name}}">{{codec.name}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Set and continue"/>
+                        </form>
+                    </div>
+
+                    <div ng-show="tabCtrlRTP.isSet(2)">
                         <form name="inputRTPAudioForm" ng-submit="inputRTPAudioForm.$valid && inputRTPCtrl.audioRTP()" novalidate>
                             <h4>Set audio input</h4>
                             <div class="row">
@@ -62,27 +69,6 @@
                                     <span class="input-group-addon form">Channels</span>
                                     <select class="form-control ng-dirty ng-invalid" name="channelsSelect" ng-model="inputRTPCtrl.inputRTPAudioChannels.channelsSelect">
                                         <option ng-repeat="channels in inputRTPCtrl.inputRTPAudioChannels.availableChannels" value="{{channels.value}}">{{channels.value}}</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Set and continue"/>
-                        </form>
-                    </div>
-
-                    <div ng-show="tabCtrlRTP.isSet(2)">
-                        <form name="inputRTPVideoForm" ng-submit="inputRTPVideoForm.$valid && inputRTPCtrl.videoRTP()" novalidate>
-                            <h4>Set video input</h4>
-                            <div class="row">
-                                <div class="input-group">
-                                    <span class="input-group-addon form">Video port</span>
-                                    <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="inputRTPCtrl.inputRTPVideoPort" ng-init="inputRTPCtrl.inputRTPVideoPort=5004" required/>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-group">
-                                    <span class="input-group-addon form">Codec</span>
-                                    <select class="form-control ng-dirty ng-invalid" name="codecSelect" ng-model="inputRTPCtrl.inputRTPVideoCodec.codecSelect" required>
-                                        <option ng-repeat="codec in inputRTPCtrl.inputRTPVideoCodec.availableCodecs" value="{{codec.name}}">{{codec.name}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -144,6 +130,21 @@
                 </div>
             </div>
         </div>
+
+        <div ng-show="tabCtrl.isSet(2)">
+            <br>
+            <form name="inputRTSPForm" ng-submit="inputRTSPForm.$valid && inputCtrl.connectUriRTSP()" novalidate>
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon form">RTSP URI</span>
+                        <input class="form-control ng-dirty ng-invalid" type="text" ng-model="inputCtrl.uri" ng-init="inputCtrl.uri='rtsp://192.168.10.55:8554/'" required/>
+                    </div>
+                </div>
+                <br>
+                <input class="col-sm-4 col-sm-offset-8 btn btn-connect" type="submit" value="Connect"/>
+            </form>
+        </div>
+
         <!--<div ng-show="tabCtrl.isSet(3)">
             <br>
             <form name="inputRTMPForm" ng-submit="inputRTMPForm.$valid && inputCtrl.connectUriRTMP()" novalidate>

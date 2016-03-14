@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('video-wall-app',['ngRoute']);
+    .module('video-wall-app',['ngRoute', 'ngDialog']);
 
 var sHost,
     sPort,
@@ -13,8 +13,6 @@ var sHost,
     lmsVideos = [],
     lmsAudios = [],
     lmsPaths = [],
-    listCrops = [],
-    zIndexMax = 0,
     idCrops = 1,
     receiverId = 1000,
     decoderId = 1100,

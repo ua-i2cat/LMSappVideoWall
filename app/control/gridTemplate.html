@@ -1,0 +1,21 @@
+<div id="grid" class="grid-snap" ng-style="gridCtrl.myStyle"></div>
+<input class="btn btn-connect" ng-click="gridCtrl.clickToView()" value="Create Crop"/>
+
+<script type="text/ng-template" id="pushCrop">
+    <div class="ngdialog-content" ng-controller="modalController as modalCtrl">
+        <form name="cropFormInput" ng-submit="cropFormInput.$valid && modalCtrl.addCrop()" novalidate>
+            <h4>Update user</h4>
+            <fieldset class="form-group">
+                <div class="row">
+                    <div class="input-group">
+                        <span class="input-group-addon form">IP</span>
+                        <input class="form-control ng-dirty ng-invalid" type="text"  ng-model="modalCtrl.IP" required/>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <input class="btn btn-connect" type="submit" value="Create crop"/>
+            </fieldset>
+        </form>
+    </div>
+</script>

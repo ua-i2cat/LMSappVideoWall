@@ -6,12 +6,12 @@ angular
 
 function mainController(apiFunctions, $window, $scope, $timeout){
     var vm = this;
-
+    vm.listCrops = [];
     vm.disconnectMain = function(){
         apiFunctions.disconnect()
         .then(function succesCallback(response){
             lmsPaths = [];
-            listCrops = [];
+            vm.listCrops = [];
             idCrops = 1;
             apiUri = null;
             sHost = null;
