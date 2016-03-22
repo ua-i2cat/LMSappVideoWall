@@ -44,6 +44,20 @@ body {
   color: #FFFFFF;
 }
 
+.btn.btn-formSelect {
+  margin: 6px 15px 6px 15px;
+  background: #009688;
+  color: #FFFFFF;
+}
+
+.form-group-little {
+  margin: 0 -15px 5px -15px;
+}
+
+.form-control-little {
+  padding: 6px 0 6px 0;
+}
+
 .btn-group.btn-group-full{
   width: 100%;
 }
@@ -69,4 +83,15 @@ body {
   background-color: #009688;
   border: solid 1px #fff;
   z-index: 0;
+  text-align: center;
+  cursor: pointer;
+}
+
+.se-resize {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: calc(100% - 4px);
+  width: 7px;
+  height: 7px;
+  cursor: se-resize;
 }

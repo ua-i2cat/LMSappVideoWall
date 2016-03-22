@@ -7,47 +7,48 @@
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Crop</span>
-                <span class="form-control"  ng-bind="controlCtrl.selectCrop" ></span>
+                <span class="form-control form-control-little" ng-bind="controlCtrl.selectCrop" ></span>
             </div>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">X</span>
-                <span class="form-control"   ng-bind="controlCtrl.xCrop" ></span>
+                <span class="form-control form-control-little" ng-bind="controlCtrl.xCrop" ></span>
             </div>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Y</span>
-                <span class="form-control"   ng-bind="controlCtrl.yCrop" ></span>
+                <span class="form-control form-control-little" ng-bind="controlCtrl.yCrop" ></span>
             </div>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Width</span>
-                <span class="form-control" ng-bind="controlCtrl.wCrop" ></span>
+                <span class="form-control form-control-little" ng-bind="controlCtrl.wCrop" ></span>
             </div>
         </div>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Height</span>
-                <span class="form-control" ng-bind="controlCtrl.hCrop" ></span>
+                <span class="form-control form-control-little" ng-bind="controlCtrl.hCrop" ></span>
             </div>
         </div>
         <input class="btn btn-connect" type="submit" value="Configure Selected Crop"/>
     </form>
     <div class="row">
-        <input class="btn btn-connect" ng-click="controlCtrl.configureAllCrops()" value="Configure All Crops"/>
+        <input class="btn btn-formSelect" ng-click="controlCtrl.configureAllCrops()" value="Configure All Crops"/>
     </div>
     <div class="row">
-        <input class="btn btn-connect" ng-click="controlCtrl.deleteSelectCrop()" value="Delete Selected Crop"/>
+        <input class="btn btn-formSelect" ng-click="controlCtrl.deleteSelectCrop()" value="Delete Selected Crop"/>
     </div>
     <h4>Configure Frame Time</h4>
     <form name="frameTimeForm" ng-submit="frameTimeForm.$valid && controlCtrl.fTimeInput()" novalidate>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Frame Time</span>
-                <input class="form-control ng-dirty ng-invalid" type="number"  ng-model="controlCtrl.frameTime" required/>
+                <input class="form-control form-control-little ng-dirty ng-invalid" type="number"
+                       ng-model="controlCtrl.frameTime" ng-init="controlCtrl.frameTime = 40000" required/>
             </div>
         </div>
         <input class="btn btn-connect" type="submit" value="Configure Frame Time"/>

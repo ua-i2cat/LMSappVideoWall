@@ -24,6 +24,8 @@ var sHost,
     inputWidth = 0,
     inputHeight =0,
     winWidth = 0,
-    winHeight = 0;
+    winHeight = 0,
+    page = "",
+    showSound = false;
 
 

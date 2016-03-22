@@ -19,46 +19,6 @@ function controlController(apiFunctions, $scope, $q){
     vm.deleteSelectCrop = deleteSelectCrop;
     load();
 
-    function load(){
-        apiFunctions.getState()
-            .then(function succesCallback(){
-                angular.forEach(lmsState.filters, function(filterIn, key) {
-                    if (filterIn.type == "videoDecoder"){
-                        videoDecoder = key;
-                    }
-                });
-                if (videoDecoder >=0) {
-                    inputInfoRight(videoDecoder)
-                        .then( function succesCallback(response){
-                            inputWidth = Number(lmsState.filters[videoDecoder].inputInfo.width);
-                            inputHeight = Number(lmsState.filters[videoDecoder].inputInfo.height);
-                            var msg = {
-                                'response': response,
-                                'state': true
-                            };
-                            $scope.$parent.$broadcast('msg', msg);
-                            $scope.$parent.$broadcast('eventInput');
-                        }, function errorCallback(response){
-                            lmsState = null;
-                            var msg = {
-                                'response': response,
-                                'state': false
-                            };
-                            $scope.$parent.$broadcast('msg', msg);
-                        }
-                        );
-
-                }
-            }, function errorCallback(response){
-                lmsState = null;
-                var msg = {
-                    'response': response,
-                    'state': false
-                };
-                $scope.$parent.$broadcast('msg', msg);
-            });
-    }
-
     function configureCrop(){
         var selected = $scope.mainCtrl.listCrops.filter(function(object) {return object.name == vm.selectCrop})[0];
         configureOneCrop(selected);
@@ -105,6 +65,46 @@ function controlController(apiFunctions, $scope, $q){
                 $scope.$parent.$broadcast('msg', response);
             });
 
+    }
+
+    function load(){
+        apiFunctions.getState()
+            .then(function succesCallback(){
+                angular.forEach(lmsState.filters, function(filterIn, key) {
+                    if (filterIn.type == "videoDecoder"){
+                        videoDecoder = key;
+                    }
+                });
+                if (videoDecoder >=0) {
+                    inputInfoRight(videoDecoder)
+                        .then( function succesCallback(response){
+                                inputWidth = Number(lmsState.filters[videoDecoder].inputInfo.width);
+                                inputHeight = Number(lmsState.filters[videoDecoder].inputInfo.height);
+                                var msg = {
+                                    'response': response,
+                                    'state': true
+                                };
+                                $scope.$parent.$broadcast('msg', msg);
+                                $scope.$parent.$broadcast('inputInfo');
+                            }, function errorCallback(response){
+                                lmsState = null;
+                                var msg = {
+                                    'response': response,
+                                    'state': false
+                                };
+                                $scope.$parent.$broadcast('msg', msg);
+                            }
+                        );
+
+                }
+            }, function errorCallback(response){
+                lmsState = null;
+                var msg = {
+                    'response': response,
+                    'state': false
+                };
+                $scope.$parent.$broadcast('msg', msg);
+            });
     }
 
     function inputInfoRight(filterIn){

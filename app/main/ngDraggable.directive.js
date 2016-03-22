@@ -15,8 +15,6 @@ function ngDraggable($document){
             elem[0].style.width = scope.mainCtrl.listCrops[scope.mainCtrl.listCrops.length-1].width * winWidth + 'px';
             elem[0].style.height = scope.mainCtrl.listCrops[scope.mainCtrl.listCrops.length-1].height * winHeight + 'px';
 
-            console.log(attr);
-
             var width  = elem[0].offsetWidth,
                 height = elem[0].offsetHeight;
 
@@ -42,7 +40,6 @@ function ngDraggable($document){
                 'left': 15
             };
 
-
             // Bind mousedown event
             elem.on('mousedown', function(e) {
                 e.preventDefault();
@@ -53,17 +50,14 @@ function ngDraggable($document){
                 if (start) start(e);
             });
 
-            elem.on('resize', function(e){
-                e.preventDefault();
-                console.log(e);
-            });
-
             // Handle drag event
             function mousemove(e) {
-                y = e.clientY - startY;
-                x = e.clientX - startX;
-                setPosition(e);
-                if (drag) drag(e);
+                if(e.target.id != "grid" && e.target.id != "" ) {
+                    y = e.clientY - startY;
+                    x = e.clientX - startX;
+                    setPosition(e);
+                    if (drag) drag(e);
+                }
             }
 
             // Unbind drag events
@@ -75,16 +69,17 @@ function ngDraggable($document){
 
             // Move element, within container if provided
             function setPosition(e) {
+
                 if (container) {
                     if (x < container.left) {
                         x = container.left;
-                    } else if (x > container.right - width) {
-                        x = container.right - width;
+                    } else if (x > container.right - elem[0].offsetWidth) {
+                        x = container.right - elem[0].offsetWidth;
                     }
                     if (y < container.top) {
                         y = container.top;
-                    } else if (y > container.bottom - height) {
-                        y = container.bottom - height;
+                    } else if (y > container.bottom - elem[0].offsetHeight) {
+                        y = container.bottom - elem[0].offsetHeight;
                     }
                 }
 
@@ -92,9 +87,11 @@ function ngDraggable($document){
                     top: y + 'px',
                     left:  x + 'px'
                 });
-                var selected = scope.mainCtrl.listCrops.filter(function(object) {return object.name == e.target.id})[0];
+                var selected = scope.mainCtrl.listCrops.filter(function (object) {
+                    return object.name == e.target.id
+                })[0];
                 selected.x = x - 15;
-                selected.y = y -5;
+                selected.y = y - 5;
             }
         }
     }

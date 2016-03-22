@@ -43,6 +43,7 @@ function inputRTPController($window, $scope, inputRTPService){
                                 vm.inputRTPAudioSampleRate.sampleRateSelect, vm.inputRTPAudioChannels.channelsSelect,
                                 vm.inputRTPVideoPort ,vm.inputRTPVideoCodec.codecSelect)
             .then(function succesCallback(response) {
+                showSound = true;
                 $scope.$parent.$broadcast('msg', response);
                 $window.location.href = '#/control';
             })

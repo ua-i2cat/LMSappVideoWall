@@ -51,7 +51,6 @@ function mainController(apiFunctions, $window, $scope, $timeout){
     vm.succesMain = function(){
         vm.successAlert = true;
         $timeout(function(){vm.successAlert = false;},1000);
-        $window.location.href='#/control';
     };
 
     vm.errorMain = function(message){

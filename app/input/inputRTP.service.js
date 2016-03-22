@@ -50,8 +50,8 @@ function inputRTPService(appFunctions, $q){
                         "medium":"audio",
                         "codec":codecSelect,
                         "bandwidth":192000,
-                        "timeStampFrequency":sampleRateSelect,
-                        "channels":channelsSelect,
+                        "timeStampFrequency":parseInt(sampleRateSelect),
+                        "channels":parseInt(channelsSelect),
                         "port":inputRTPAudioPort
                     }
                 ]
@@ -112,8 +112,8 @@ function inputRTPService(appFunctions, $q){
                         "medium":"audio",
                         "codec":audioCodecSelect,
                         "bandwidth":192000,
-                        "timeStampFrequency":sampleRateSelect,
-                        "channels":channelsSelect,
+                        "timeStampFrequency":parseInt(sampleRateSelect),
+                        "channels":parseInt(channelsSelect),
                         "port":inputRTPAudioPort
                     }
                 ]

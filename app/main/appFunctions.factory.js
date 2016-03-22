@@ -48,18 +48,36 @@ function appFunctions(apiFunctions, $q){
                     "x":Number(message.x),
                     "y":Number(message.y)
                 }
-            },
-            lmsTransmitter = {
-                'params'    : {
+            };
+        console.log(message);
+        console.log(showSound);
+        var lmsTransmitter = {
+            'videoParams' : {
+                "subsessions":[
+                {
                     "id":idCrops,
                     "txFormat":"std",
                     "name":plainrtp,
                     "info":plainrtp,
                     "desc":plainrtp,
                     "readers":[idCrops]
-                }
+                }]
+            }
             };
-
+        if (showSound) {
+            lmsTransmitter['audioParams'] = {
+                "subsessions":[
+                {
+                    "id": lmsInput.audioParams.subsessions[0].port,
+                    "txFormat": "std",
+                    "name": plainrtp,
+                    "info": plainrtp,
+                    "desc": plainrtp,
+                    "readers": [lmsInput.audioParams.subsessions[0].port]
+                }]
+            }
+        }
+        console.log(lmsTransmitter);
         apiFunctions.createFilter(resamplerId, "videoResampler")
             .then(function succesCallback(){
                 apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
@@ -76,8 +94,9 @@ function appFunctions(apiFunctions, $q){
                                                 apiFunctions.configureFilter(videoSplitterId, "configCrop", lmsSplitter.params)
                                                     .then(function succesCallback(){
                                                         ++idCrops;
-                                                        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params)
+                                                        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.videoParams)
                                                             .then(function succesCallback(response) {
+
                                                                 portRTP = portRTP + 2;
                                                                 deferred.resolve(response);
                                                             }, function errorCallback() {
@@ -302,7 +321,7 @@ function appFunctions(apiFunctions, $q){
                                                     });
                                                 break;
                                             case 'av':
-                                                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.params)
+                                                apiFunctions.configureFilter(receiverId, 'addSession', lmsInput.videoParams)
                                                     .then(function(){
                                                         apiFunctions.createPath(lmsInput.videoParams.subsessions[0].port, receiverId, videoSplitterId, lmsInput.videoParams.subsessions[0].port, -1, midFiltersIds)
                                                             .then(function(response){
