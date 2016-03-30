@@ -49,35 +49,19 @@ function appFunctions(apiFunctions, $q){
                     "y":Number(message.y)
                 }
             };
-        console.log(message);
-        console.log(showSound);
         var lmsTransmitter = {
-            'videoParams' : {
-                "subsessions":[
-                {
-                    "id":idCrops,
-                    "txFormat":"std",
-                    "name":plainrtp,
-                    "info":plainrtp,
-                    "desc":plainrtp,
-                    "readers":[idCrops]
-                }]
+            'params' : {
+                "id":idCrops,
+                "txFormat":"std",
+                "name":plainrtp,
+                "info":plainrtp,
+                "desc":plainrtp,
+                "readers":[idCrops]
             }
             };
         if (showSound) {
-            lmsTransmitter['audioParams'] = {
-                "subsessions":[
-                {
-                    "id": lmsInput.audioParams.subsessions[0].port,
-                    "txFormat": "std",
-                    "name": plainrtp,
-                    "info": plainrtp,
-                    "desc": plainrtp,
-                    "readers": [lmsInput.audioParams.subsessions[0].port]
-                }]
-            }
+            lmsTransmitter.params.readers.push(lmsInput.audioParams.subsessions[0].port);
         }
-        console.log(lmsTransmitter);
         apiFunctions.createFilter(resamplerId, "videoResampler")
             .then(function succesCallback(){
                 apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
@@ -94,9 +78,8 @@ function appFunctions(apiFunctions, $q){
                                                 apiFunctions.configureFilter(videoSplitterId, "configCrop", lmsSplitter.params)
                                                     .then(function succesCallback(){
                                                         ++idCrops;
-                                                        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.videoParams)
+                                                        apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params)
                                                             .then(function succesCallback(response) {
-
                                                                 portRTP = portRTP + 2;
                                                                 deferred.resolve(response);
                                                             }, function errorCallback() {

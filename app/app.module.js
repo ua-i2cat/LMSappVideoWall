@@ -1,7 +1,7 @@
 'use strict';
 
 angular
-    .module('video-wall-app',['ngRoute', 'ngDialog']);
+    .module('video-wall-app',['ngRoute', 'ngDialog', 'angularSpinner']);
 
 var sHost,
     sPort,
@@ -25,7 +25,6 @@ var sHost,
     inputHeight =0,
     winWidth = 0,
     winHeight = 0,
-    page = "",
     showSound = false;
 
 

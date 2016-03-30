@@ -2,13 +2,13 @@ angular
     .module('video-wall-app')
     .directive('ceResize', ceResize);
 
-function ceResize($document){
+function ceResize($document, $window){
     return {
         restrict: 'A',
         scope: true,
         link: function(scope, elem, attr) {
             var startX, startY, container, containerParent,
-                x, y, resize;
+                x, y, resize, start, stop;
 
             // Create a div to catch resize down right event
             var newElement = angular.element('<div class="se-resize"></div>');
@@ -16,8 +16,10 @@ function ceResize($document){
 
             // Obtain drag options
             if (scope.resizeOptions) {
-                resize  = scope.dragOptions.resize;
-                var id = scope.dragOptions.container;
+                resize = scope.resizeOptions.resize;
+                start = scope.resizeOptions.start;
+                stop = scope.resizeOptions.stop;
+                var id = scope.resizeOptions.container;
                 if (id) {
                     containerParent = document.getElementById(id).getBoundingClientRect();
                 }
@@ -39,6 +41,7 @@ function ceResize($document){
                 y = elem[0].offsetTop - 5;
                 $document.on("mousemove", mousemove);
                 $document.on("mouseup", mouseup);
+                if (start) start(e);
             });
 
             function mousemove(e) {
@@ -47,16 +50,17 @@ function ceResize($document){
                 if (resize) resize(e);
             }
 
-            function mouseup() {
+            function mouseup(e) {
                 $document.unbind("mousemove", mousemove);
                 $document.unbind("mouseup", mouseup);
+                if (stop) stop(e);
             }
 
             // Function to manage resize right event
             function resizeSE(e) {
-                console.log("resize");
-                var width = e.clientX - elem[0].offsetParent.offsetLeft - 15;
-                var height = e.clientY - elem[0].offsetParent.offsetTop - 5;
+                console.log(elem[0]);
+                var width = e.clientX - elem[0].offsetParent.offsetLeft - 15 - x + $window.scrollX;
+                var height = e.clientY - elem[0].offsetParent.offsetTop - 5 - y + $window.scrollY;
 
                 if (container){
                     if (width + x + 15 > container.right){

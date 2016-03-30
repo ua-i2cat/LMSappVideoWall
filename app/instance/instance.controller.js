@@ -7,7 +7,7 @@ angular
 function instanceController($scope, $window, instanceService){
     var vm = this;
     vm.connectInstance = connectInstance;
-
+    console.log($scope);
 
     function connectInstance() {
         sHost = vm.serverHostname;
@@ -16,11 +16,12 @@ function instanceController($scope, $window, instanceService){
 
         instanceService.connect()
             .then(function succesCallback(response) {
-                    $scope.$parent.$broadcast('msg', response);
-                    $window.location.href = '#/input';
+                $scope.$parent.$broadcast('msg', response);
+                $scope.mainCtrl.pageLocation = "input";
+                $window.location.href = '#/input';
             })
             .catch(function errorCallback(response) {
-                    $scope.$parent.$broadcast('msg', response);
+                $scope.$parent.$broadcast('msg', response);
             });
     }
 }

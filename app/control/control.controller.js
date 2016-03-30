@@ -4,7 +4,7 @@ angular
     .module('video-wall-app')
     .controller('controlController', controlController);
 
-function controlController(apiFunctions, $scope, $q){
+function controlController(apiFunctions, $scope, $q, $document, $window){
     var vm = this,
         videoDecoder = -1;
     vm.selectCrop = "";
@@ -13,6 +13,12 @@ function controlController(apiFunctions, $scope, $q){
     vm.hCrop = "";
     vm.wCrop = "";
     vm.frameTime = "";
+
+    console.log($scope);
+
+    vm.showCrop = false;
+    vm.showAllCrops = false;
+
     vm.fTimeInput = fTimeInput;
     vm.configureCrop = configureCrop;
     vm.configureAllCrops = configureAllCrops;
@@ -31,15 +37,20 @@ function controlController(apiFunctions, $scope, $q){
     }
 
     function configureOneCrop(selected){
+        var width = (selected.width * inputWidth).toFixed(0);
+        var height = (selected.height * inputHeight).toFixed(0);
+        if (width % 2 != 0){width--}
+        if (height % 2 != 0){height--}
         var lmsSplitter = {
             'params'    : {
                 'id': selected.id,
-                'width': selected.width,
-                'height': selected.height,
-                'x':selected.x/winWidth,
-                'y':selected.y/winHeight
+                'width': parseFloat((width/inputWidth)),
+                'height': parseFloat((height/inputHeight)),
+                'x': parseFloat((selected.x/winWidth).toFixed(2)),
+                'y': parseFloat((selected.y/winHeight).toFixed(2))
             }
         };
+
         apiFunctions.configureFilter(videoSplitterId, "configCrop", lmsSplitter.params)
             .then(function succesCallback(response){
                 $scope.$parent.$broadcast('msg', response);
@@ -49,7 +60,15 @@ function controlController(apiFunctions, $scope, $q){
     }
 
     function deleteSelectCrop(){
-
+        var selected = $scope.mainCtrl.listCrops.filter(function(object) {return object.name == vm.selectCrop})[0];
+        apiFunctions.deletePath(selected.pathId)
+            .then(function succesCallback(response){
+                if ($scope.mainCtrl.listCrops.length == 0) vm.showCrop = false;
+                if ($scope.mainCtrl.listCrops.length == 1) vm.showAllCrops = false;
+                $scope.$parent.$broadcast('msg', response);
+            }, function errorCallback(response){
+                $scope.$parent.$broadcast('msg', response);
+            });
     }
 
     function fTimeInput(){
@@ -126,14 +145,43 @@ function controlController(apiFunctions, $scope, $q){
     }
 
     $scope.$on('selectCrop', function(evt, crop){
-        var selected = $scope.mainCtrl.listCrops.filter(function(object) {return object.name == crop.target.id})[0];
-        $scope.$apply(function(){
-            vm.selectCrop = crop.target.id;
-            vm.xCrop = selected.x;
-            vm.yCrop = selected.y;
-            vm.hCrop = selected.height * winHeight;
-            vm.wCrop = selected.width * winWidth;
-        });
+        var selected;
+        if (crop.target.id != "grid") {
+            angular.forEach($scope.mainCtrl.listCrops, function(cropOfList, key) {
+                document.getElementById(cropOfList.name).style.zIndex = "0";
+            });
+            if (crop.target.id == "") {
+                selected = $scope.mainCtrl.listCrops.filter(function (object) {
+                    return object.name == crop.target.offsetParent.id
+                })[0];
+                $scope.$apply(function () {
+                    vm.selectCrop = crop.target.offsetParent.id;
+                    vm.xCrop = selected.x;
+                    vm.yCrop = selected.y;
+                    vm.hCrop = (selected.height * winHeight).toFixed(0);
+                    vm.wCrop = (selected.width * winWidth).toFixed(0);
+                });
+                document.getElementById(crop.target.offsetParent.id).style.zIndex = "1";
+            } else {
+                selected = $scope.mainCtrl.listCrops.filter(function (object) {
+                    return object.name == crop.target.id
+                })[0];
+                $scope.$apply(function () {
+                    vm.selectCrop = crop.target.id;
+                    vm.xCrop = selected.x;
+                    vm.yCrop = selected.y;
+                    vm.hCrop = (selected.height * winHeight).toFixed(0);
+                    vm.wCrop = (selected.width * winWidth).toFixed(0);
+                });
+                document.getElementById(crop.target.id).style.zIndex = "1";
+            }
+
+        }
+    });
+
+    $scope.$on('newCrop', function(evt){
+        if ($scope.mainCtrl.listCrops.length > 0) vm.showCrop = true;
+        if ($scope.mainCtrl.listCrops.length > 1) vm.showAllCrops = true;
     });
 }
 

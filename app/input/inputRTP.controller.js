@@ -6,7 +6,7 @@ angular
 
 function inputRTPController($window, $scope, inputRTPService){
     var vm = this;
-
+    console.log($scope);
     vm.inputRTPAudioCodec = inputRTPService.inputRTPAudioCodec;
     vm.inputRTPAudioSampleRate = inputRTPService.inputRTPAudioSampleRate;
     vm.inputRTPAudioChannels = inputRTPService.inputRTPAudioChannels;
@@ -20,6 +20,7 @@ function inputRTPController($window, $scope, inputRTPService){
                                 vm.inputRTPAudioSampleRate.sampleRateSelect, vm.inputRTPAudioChannels.channelsSelect)
             .then(function succesCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
+                $scope.mainCtrl.pageLocation = "control";
                 $window.location.href = '#/control';
             })
             .catch(function errorCallback(response) {
@@ -31,6 +32,7 @@ function inputRTPController($window, $scope, inputRTPService){
         inputRTPService.video(vm.inputRTPVideoPort ,vm.inputRTPVideoCodec.codecSelect)
             .then(function succesCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
+                $scope.mainCtrl.pageLocation = "control";
                 $window.location.href = '#/control';
             })
             .catch(function errorCallback(response) {
@@ -45,6 +47,7 @@ function inputRTPController($window, $scope, inputRTPService){
             .then(function succesCallback(response) {
                 showSound = true;
                 $scope.$parent.$broadcast('msg', response);
+                $scope.mainCtrl.pageLocation = "control";
                 $window.location.href = '#/control';
             })
             .catch(function errorCallback(response) {

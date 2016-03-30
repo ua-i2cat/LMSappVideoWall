@@ -7,6 +7,8 @@ angular
 function gridController($scope, $element, $compile, ngDialog, appFunctions, $rootScope) {
     var vm = this,
         element;
+    console.log($scope);
+    vm.showAll = false;
 
     $scope.$on('inputInfo', function(evt){
         winWidth = $element[0].firstElementChild.clientWidth;
@@ -16,27 +18,28 @@ function gridController($scope, $element, $compile, ngDialog, appFunctions, $roo
         el.css({
             height: winHeight + 'px'
         });
+        vm.showAll = true;
     });
 
     $scope.dragOptions = {
         start: function(e) {
-            console.log("STARTING");
-        },
-        drag: function(e) {
-            console.log("DRAGGING");
             $scope.$parent.$broadcast('selectCrop', e);
         },
-        stop: function(e) {
-            console.log("STOPPING");
+        drag: function(e) {
+            $scope.$parent.$broadcast('selectCrop', e);
         },
+        stop: function(e) {},
         container: 'grid'
     };
 
     $scope.resizeOptions = {
-        resize: function(e) {
-            console.log("RESIZE");
+        start: function(e) {
             $scope.$parent.$broadcast('selectCrop', e);
         },
+        resize: function(e) {
+            $scope.$parent.$broadcast('selectCrop', e);
+        },
+        stop: function(e) {},
         container: 'grid'
     };
 
@@ -59,12 +62,13 @@ function gridController($scope, $element, $compile, ngDialog, appFunctions, $roo
         }
         appFunctions.setSplitterToTransmitter(configCrop)
             .then(function succesCallback(response){
-                $scope.$parent.$broadcast('msg', response);
                 var crop = angular.element('<div class="outputCrop" ng-draggable="dragOptions" ce-resize="resizeOptions">' + configCrop.name + '</div></div>')[0];
                 crop.id = configCrop.name;
                 $scope.mainCtrl.listCrops.push(configCrop);
                 element.firstChild.appendChild(crop);
                 $compile(crop)($scope);
+                $scope.$parent.$broadcast('newCrop');
+                $scope.$parent.$broadcast('msg', response);
             }, function errorCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
             });

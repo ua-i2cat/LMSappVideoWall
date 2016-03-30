@@ -32,9 +32,7 @@ function config($routeProvider, ngDialogProvider){
         closeByDocument: true,
         closeByEscape: true,
         appendTo: false,
-        preCloseCallback: function () {
-            console.log('default pre-close callback');
-        }
+        preCloseCallback: function () {}
     });
 }
 

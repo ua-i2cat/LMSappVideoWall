@@ -6,7 +6,7 @@ angular
 
 function inputController(inputService, $window, $scope){
     var vm = this;
-
+    console.log($scope);
     $scope.mainCtrl.disconnectShow = true;
 
     vm.connectUriRTMP = connectUriRTMP;
@@ -16,6 +16,7 @@ function inputController(inputService, $window, $scope){
         inputService.connectUriRTMP(vm.uri)
             .then(function succesCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
+                $scope.mainCtrl.pageLocation = "control";
                 $window.location.href = '#/control';
             })
             .catch(function errorCallback(response) {
@@ -29,6 +30,7 @@ function inputController(inputService, $window, $scope){
         inputService.connectUriRTSP(vm.uri)
             .then(function succesCallback(response) {
                 $scope.$parent.$broadcast('msg', response);
+                $scope.mainCtrl.pageLocation = "control";
                 $window.location.href = '#/control';
             })
             .catch(function errorCallback(response) {

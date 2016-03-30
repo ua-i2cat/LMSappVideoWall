@@ -4,8 +4,11 @@ angular
     .module('video-wall-app')
     .controller('modalController', modalController);
 
-function modalController($rootScope) {
+function modalController($rootScope, $scope) {
     var vm = this;
+
+    console.log($scope);
+
     vm.sound = false;
     vm.addCrop = addCrop;
     vm.showSound = showSound;

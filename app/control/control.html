@@ -3,7 +3,7 @@
 </div>
 <div class="col-sm-2">
     <h4>Selected Crop</h4>
-    <form name="cropForm" ng-submit="controlCtrl.configureCrop()">
+    <form name="cropForm" ng-submit="controlCtrl.configureCrop()" ng-show="controlCtrl.showCrop">
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Crop</span>
@@ -37,13 +37,13 @@
         <input class="btn btn-connect" type="submit" value="Configure Selected Crop"/>
     </form>
     <div class="row">
-        <input class="btn btn-formSelect" ng-click="controlCtrl.configureAllCrops()" value="Configure All Crops"/>
+        <input class="btn btn-formSelect" ng-click="controlCtrl.configureAllCrops()" ng-show="controlCtrl.showAllCrops" value="Configure All Crops"/>
     </div>
     <div class="row">
-        <input class="btn btn-formSelect" ng-click="controlCtrl.deleteSelectCrop()" value="Delete Selected Crop"/>
+        <input class="btn btn-formSelect" ng-click="controlCtrl.deleteSelectCrop()" ng-show="controlCtrl.showCrop" value="Delete Selected Crop"/>
     </div>
     <h4>Configure Frame Time</h4>
-    <form name="frameTimeForm" ng-submit="frameTimeForm.$valid && controlCtrl.fTimeInput()" novalidate>
+    <form name="frameTimeForm" ng-submit="frameTimeForm.$valid && controlCtrl.fTimeInput()" ng-show="controlCtrl.showCrop" novalidate>
         <div class="row">
             <div class="input-group">
                 <span class="input-group-addon form">Frame Time</span>

@@ -1,5 +1,6 @@
 <div id="grid" class="grid-snap"></div>
-<input class="btn btn-connect" ng-click="gridCtrl.clickToView()" value="Create Crop"/>
+<input class="btn btn-connect" ng-click="gridCtrl.clickToView()" ng-show="gridCtrl.showAll" value="Create Crop"/>
+<span us-spinner ng-hide="gridCtrl.showAll"></span>
 
 <script type="text/ng-template" id="pushCrop">
     <div class="ngdialog-content" ng-controller="modalController as modalCtrl">
