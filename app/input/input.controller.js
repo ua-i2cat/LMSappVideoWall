@@ -6,7 +6,6 @@ angular
 
 function inputController(inputService, $window, $scope){
     var vm = this;
-    console.log($scope);
     $scope.mainCtrl.disconnectShow = true;
 
     vm.connectUriRTMP = connectUriRTMP;

@@ -4,14 +4,16 @@ angular
     .module('video-wall-app')
     .controller('modalController', modalController);
 
-function modalController($rootScope, $scope) {
+function modalController($rootScope) {
     var vm = this;
-
-    console.log($scope);
 
     vm.sound = false;
     vm.addCrop = addCrop;
-    vm.showSound = showSound;
+    if (soundCrop == "") {
+        vm.showSound = showSound;
+    } else {
+        vm.showSound = false;
+    }
     vm.inputAspectRatio = {
         aspectRatioSelect: '16:9',
         availableAspectRatios: [
@@ -22,21 +24,32 @@ function modalController($rootScope, $scope) {
         ]
     };
 
-    vm.inputTypes = {
-        typeSelect: 'Master',
-        availableTypes: [
-            {name: 'Master'},
-            {name: 'Slave'}
-        ]
-    };
+    if (masterCrop == "") {
+        vm.inputTypes = {
+            typeSelect: 'Master',
+            availableTypes: [
+                {name: 'Master'},
+                {name: 'Slave'}
+            ]
+        };
+    } else {
+        vm.inputTypes = {
+            typeSelect: 'Slave',
+            availableTypes: [
+                {name: 'Slave'}
+            ]
+        };
+    }
 
     function addCrop() {
         var addCrop = {
             'IP': vm.IP,
             'aspectRatio': vm.inputAspectRatio.aspectRatioSelect,
-            'type': vm.inputTypes.typeSelect,
-            'sound': vm.sound
+            'type': vm.inputTypes.typeSelect
         };
+        if (vm.showSound){
+            addCrop['sound'] = vm.sound;
+        }
         $rootScope.$broadcast('addCrop', addCrop);
     }
 }

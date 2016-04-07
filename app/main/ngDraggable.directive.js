@@ -2,7 +2,7 @@ angular
     .module('video-wall-app')
     .directive('ngDraggable', ngDraggable);
 
-function ngDraggable($document){
+function ngDraggable($document, $window){
     return {
         restrict: 'A',
         scope: true,
@@ -29,14 +29,40 @@ function ngDraggable($document){
                 }
             }
 
+            angular.element($window).on('resize', function(){
+                containerParent = document.getElementById(id).getBoundingClientRect();
+                var oldWidth = container.width;
+                var oldHeight = container.height;
+                container = {
+                    'x': containerParent.x,
+                    'y': containerParent.y,
+                    'width': containerParent.width,
+                    'height': containerParent.height,
+                    'top': 0,
+                    'right': containerParent.width + 15,
+                    'bottom': containerParent.height,
+                    'left': 15
+                };
+                var selected = scope.mainCtrl.listCrops.filter(function(object) {return object.name == elem[0].id})[0];
+                x = Number((x * container.width / oldWidth).toFixed(0));
+                y = Number((y * container.height / oldHeight).toFixed(0));
+                elem[0].style.width = selected.width * winWidth + 'px';
+                elem[0].style.height = selected.height * winHeight + 'px';
+
+                elem.css({
+                    top: y + 'px',
+                    left:  x + 'px'
+                });
+            });
+
             container = {
                 'x': containerParent.x,
                 'y': containerParent.y,
                 'width': containerParent.width,
                 'height': containerParent.height,
-                'top': 5,
+                'top': 0,
                 'right': containerParent.width + 15,
-                'bottom': containerParent.height + 5,
+                'bottom': containerParent.height,
                 'left': 15
             };
 
@@ -91,7 +117,7 @@ function ngDraggable($document){
                     return object.name == e.target.id
                 })[0];
                 selected.x = x - 15;
-                selected.y = y - 5;
+                selected.y = y;
             }
         }
     }

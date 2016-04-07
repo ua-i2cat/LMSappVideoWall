@@ -1,5 +1,6 @@
 <div id="grid" class="grid-snap"></div>
-<input class="btn btn-connect" ng-click="gridCtrl.clickToView()" ng-show="gridCtrl.showAll" value="Create Crop"/>
+<input class="btn btn-grid" ng-click="gridCtrl.clickToView()" ng-show="gridCtrl.showAll" value="Create Crop"/>
+<input class="btn btn-grid" ng-click="gridCtrl.playInReceiver()" ng-show="gridCtrl.showPlay" value="Play"/>
 <span us-spinner ng-hide="gridCtrl.showAll"></span>
 
 <script type="text/ng-template" id="pushCrop">

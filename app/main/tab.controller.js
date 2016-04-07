@@ -5,7 +5,6 @@ angular
     .controller('tabController', tabController);
 
 function tabController($scope){
-    console.log($scope);
     var vm = this;
     vm.tab = 1;
 

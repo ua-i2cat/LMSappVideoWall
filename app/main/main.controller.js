@@ -8,28 +8,21 @@ function mainController(apiFunctions, $window, $scope, $timeout){
     var vm = this;
     vm.listCrops = [];
     vm.pageLocation = "";
-    console.log($scope);
+
     vm.disconnectMain = function(){
         apiFunctions.disconnect()
         .then(function succesCallback(response){
             lmsPaths = [];
             vm.listCrops = [];
             idCrops = 1;
-            receiverId = 1000;
-            decoderId = 1100;
             resamplerId = 1200;
-            videoSplitterId = 1300;
             encoderId = 1401;
-            transmitterId = 1500;
-            pathTransmitterId = 2000;
-            inputWidth = 0;
-            inputHeight =0;
-            winWidth = 0;
-            winHeight = 0;
             apiUri = null;
             sHost = null;
             sPort = null;
-            vm.pageLocation = "";
+            vm.disconnectShow = false;
+            vm.saveShow = false;
+            vm.pageLocation = "main";
             $window.location.href='/#/';
             $scope.$parent.$broadcast('msg', response);
         }, function errorCallback(response){$scope.$parent.$broadcast('msg', response);});
@@ -38,6 +31,7 @@ function mainController(apiFunctions, $window, $scope, $timeout){
 
     vm.save = function(){
         console.log("save");
+        console.log($scope);
     };
 
     vm.open = function(){

@@ -6,7 +6,6 @@ angular
 
 function inputRTPController($window, $scope, inputRTPService){
     var vm = this;
-    console.log($scope);
     vm.inputRTPAudioCodec = inputRTPService.inputRTPAudioCodec;
     vm.inputRTPAudioSampleRate = inputRTPService.inputRTPAudioSampleRate;
     vm.inputRTPAudioChannels = inputRTPService.inputRTPAudioChannels;

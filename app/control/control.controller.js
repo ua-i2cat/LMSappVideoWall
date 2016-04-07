@@ -4,7 +4,7 @@ angular
     .module('video-wall-app')
     .controller('controlController', controlController);
 
-function controlController(apiFunctions, $scope, $q, $document, $window){
+function controlController(apiFunctions, $scope, $q, $document){
     var vm = this,
         videoDecoder = -1;
     vm.selectCrop = "";
@@ -13,8 +13,6 @@ function controlController(apiFunctions, $scope, $q, $document, $window){
     vm.hCrop = "";
     vm.wCrop = "";
     vm.frameTime = "";
-
-    console.log($scope);
 
     vm.showCrop = false;
     vm.showAllCrops = false;
@@ -63,8 +61,12 @@ function controlController(apiFunctions, $scope, $q, $document, $window){
         var selected = $scope.mainCtrl.listCrops.filter(function(object) {return object.name == vm.selectCrop})[0];
         apiFunctions.deletePath(selected.pathId)
             .then(function succesCallback(response){
+                if (vm.selectCrop == masterCrop) masterCrop = "";
+                if (vm.selectCrop == soundCrop) soundCrop = "";
                 if ($scope.mainCtrl.listCrops.length == 0) vm.showCrop = false;
                 if ($scope.mainCtrl.listCrops.length == 1) vm.showAllCrops = false;
+                var element = angular.element(document.querySelector('#' + vm.selectCrop));
+                element.remove();
                 $scope.$parent.$broadcast('msg', response);
             }, function errorCallback(response){
                 $scope.$parent.$broadcast('msg', response);
@@ -83,7 +85,6 @@ function controlController(apiFunctions, $scope, $q, $document, $window){
             }, function errorCallback(response){
                 $scope.$parent.$broadcast('msg', response);
             });
-
     }
 
     function load(){
@@ -132,11 +133,12 @@ function controlController(apiFunctions, $scope, $q, $document, $window){
             .then(function succesCallback(){
                 if (Number(lmsState.filters[filterIn].inputInfo.height) == 0) {
                     inputInfoRight(videoDecoder)
-                        .then(function succesCallback(){
-                            deferred.resolve({'response': 'OK', 'state': true});
+                        .then(function succesCallback(response){
+                            deferred.resolve(response);
                         })
                 } else {
-                    deferred.resolve({'response': 'OK', 'state': true});
+                    var response = 'OK';
+                    deferred.resolve(response);
                 }
             }, function errorCallback() {
                 deferred.reject({'response': 'Api: Error sessions availables.', 'state': false});

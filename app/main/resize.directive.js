@@ -25,20 +25,35 @@ function ceResize($document, $window){
                 }
             }
 
+            angular.element($window).on('resize', function(){
+                containerParent = document.getElementById(id).getBoundingClientRect();
+
+                container = {
+                    'x': containerParent.x,
+                    'y': containerParent.y,
+                    'width': containerParent.width,
+                    'height': containerParent.height,
+                    'top': 0,
+                    'right': containerParent.width + 15,
+                    'bottom': containerParent.height,
+                    'left': 15
+                };
+            });
+
             container = {
                 'x': containerParent.x,
                 'y': containerParent.y,
                 'width': containerParent.width,
                 'height': containerParent.height,
-                'top': 5,
+                'top': 0,
                 'right': containerParent.width + 15,
-                'bottom': containerParent.height + 5,
+                'bottom': containerParent.height,
                 'left': 15
             };
 
             newElement.on("mousedown", function(e) {
                 x = elem[0].offsetLeft - 15;
-                y = elem[0].offsetTop - 5;
+                y = elem[0].offsetTop;
                 $document.on("mousemove", mousemove);
                 $document.on("mouseup", mouseup);
                 if (start) start(e);
@@ -58,9 +73,8 @@ function ceResize($document, $window){
 
             // Function to manage resize right event
             function resizeSE(e) {
-                console.log(elem[0]);
                 var width = e.clientX - elem[0].offsetParent.offsetLeft - 15 - x + $window.scrollX;
-                var height = e.clientY - elem[0].offsetParent.offsetTop - 5 - y + $window.scrollY;
+                var height = e.clientY - elem[0].offsetParent.offsetTop - y + $window.scrollY;
 
                 if (container){
                     if (width + x + 15 > container.right){
@@ -72,9 +86,9 @@ function ceResize($document, $window){
                             width: width + "px"
                         });
                     }
-                    if (height + y - 5 > container.bottom) {
+                    if (height + y > container.bottom) {
                         elem.css({
-                            height: container.bottom - y - 5 + "px"
+                            height: container.bottom - y + "px"
                         });
                     } else {
                         elem.css({

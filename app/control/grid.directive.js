@@ -7,7 +7,12 @@ function gridDirective() {
         restrict: 'E',
         controller: 'gridController',
         controllerAs: 'gridCtrl',
-        templateUrl: '/app/control/gridTemplate.html'
+        templateUrl: '/app/control/gridTemplate.html'/*,
+        link: function(scope, elem, attrs){
+            elem.on('$destroy', function(){
+                alert('destroyed');
+            })
+        }*/
     };
 
     return directive;

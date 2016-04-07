@@ -59,7 +59,7 @@ function appFunctions(apiFunctions, $q){
                 "readers":[idCrops]
             }
             };
-        if (showSound) {
+        if (showSound && message.sound) {
             lmsTransmitter.params.readers.push(lmsInput.audioParams.subsessions[0].port);
         }
         apiFunctions.createFilter(resamplerId, "videoResampler")
@@ -238,11 +238,11 @@ function appFunctions(apiFunctions, $q){
             .then(function succesCallback(){
                 if (lmsState.filters[0].sessions.length == 0){
                     resolveState()
-                        .then(function succesCallback(){
-                            deferred.resolve({'response': 'OK', 'state': true});
+                        .then(function succesCallback(response){
+                            deferred.resolve(response);
                         })
                 } else {
-                    deferred.resolve({'response': 'OK', 'state': true});
+                    deferred.resolve(response);
                 }
             }, function errorCallback() {
                 deferred.reject({'response': 'Api: Error sessions availables.', 'state': false});

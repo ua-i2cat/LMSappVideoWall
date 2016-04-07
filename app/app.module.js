@@ -25,6 +25,8 @@ var sHost,
     inputHeight =0,
     winWidth = 0,
     winHeight = 0,
-    showSound = false;
+    showSound = false,
+    masterCrop = "",
+    soundCrop = "";
 
 

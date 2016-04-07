@@ -7,7 +7,6 @@ angular
 function instanceController($scope, $window, instanceService){
     var vm = this;
     vm.connectInstance = connectInstance;
-    console.log($scope);
 
     function connectInstance() {
         sHost = vm.serverHostname;
@@ -24,4 +23,6 @@ function instanceController($scope, $window, instanceService){
                 $scope.$parent.$broadcast('msg', response);
             });
     }
+
+
 }

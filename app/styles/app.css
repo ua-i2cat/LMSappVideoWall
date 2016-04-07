@@ -1,15 +1,17 @@
-/* app css stylesheet
-html,body {
-  height:100%
-} */
-
-body {
-  font-size:81.25%;
-  margin: 5px 5px 5px 5px;
-  min-width:400px;
-  background: #B2DFDB;
+/* app css stylesheet*/
+html body {
+  height:100%;
 }
 
+body {
+  /*font-size:81.25%;
+  margin: 5px 5px 5px 5px;
+  min-width:400px;*/
+
+}
+.row.row-wout-margin {
+  margin: 0 0 0 0;
+}
 .navbar{
   background: #009688;
 }
@@ -36,12 +38,18 @@ body {
 }
 
 .input-group-addon.form{
-  background-color: #B2DFDB;
+  background-color: #009688;
 }
 
 .btn.btn-connect {
   background: #009688;
   color: #FFFFFF;
+}
+
+.btn.btn-grid {
+  background: #009688;
+  color: #FFFFFF;
+  margin-top: 5px;
 }
 
 .btn.btn-formSelect {
@@ -75,7 +83,7 @@ body {
   background-color: #000;
   color: #fff;
   font-size: 1.2em;
-  margin: 5px 0 5px 0;
+  /*margin: 5px 0 5px 0;*/
 }
 
 .outputCrop{
