@@ -17,7 +17,7 @@ function appFunctions(apiFunctions, $q){
 
     return service;
 
-    function setSplitterToTransmitter(message){
+    function setSplitterToTransmitter(message, resamplerId, idCrops, encoderId, pathTransmitterId){
         var deferred = $q.defer(),
             midFiltersIds = [resamplerId, encoderId],
             plainrtp = "plainrtp" + idCrops,
@@ -66,18 +66,14 @@ function appFunctions(apiFunctions, $q){
             .then(function succesCallback(){
                 apiFunctions.configureFilter(resamplerId, "configure", lmsResampler.params)
                     .then(function succesCallback(){
-                        ++resamplerId;
                         apiFunctions.createFilter(encoderId, "videoEncoder")
                             .then(function succesCallback(){
                                 apiFunctions.configureFilter(encoderId, "configure", lmsEncoder.params)
                                     .then(function succesCallback(){
-                                        ++encoderId;
                                         apiFunctions.createPath(pathTransmitterId, videoSplitterId, transmitterId, idCrops, idCrops, midFiltersIds)
                                             .then(function succesCallback(){
-                                                ++pathTransmitterId;
                                                 apiFunctions.configureFilter(videoSplitterId, "configCrop", lmsSplitter.params)
                                                     .then(function succesCallback(){
-                                                        ++idCrops;
                                                         apiFunctions.configureFilter(transmitterId, "addRTSPConnection", lmsTransmitter.params)
                                                             .then(function succesCallback(response) {
                                                                 portRTP = portRTP + 2;

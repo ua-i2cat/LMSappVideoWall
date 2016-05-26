@@ -31,6 +31,8 @@
   <!--App SERVICES-->
   <script src="app/main/apiFunctions.factory.js"></script>
   <script src="app/main/appFunctions.factory.js"></script>
+  <script src="app/main/receiverFunctions.factory.js"></script>
+  <script src="app/main/main.service.js"></script>
   <script src="app/instance/instance.service.js"></script>
   <script src="app/input/input.service.js"></script>
   <script src="app/input/inputRTP.service.js"></script>
@@ -69,6 +71,15 @@
           <a data-bb="confirm" class="btn btn-connect btn-navbar" ng-click="mainCtrl.disconnectMain()" ng-show="mainCtrl.disconnectShow"><span class="glyphicon glyphicon-stop"></span> Disconnect</a>
           <a data-bb="confirm" class="btn btn-connect btn-navbar" ng-click="mainCtrl.save()" ng-show="mainCtrl.saveShow"><span class="glyphicon glyphicon-folder-close"></span> Save</a>
           <a data-bb="confirm" class="btn btn-connect btn-navbar" ng-click="mainCtrl.open()" ng-show="mainCtrl.openShow"><span class="glyphicon glyphicon-folder-open"></span> Open</a>
+          <form class="navbar-form navbar-left " name="configForm" ng-show="mainCtrl.configurationsShow" ng-submit="mainCtrl.setConfig()" novalidate>
+            <div class="input-group input-form-group">
+              <span class="input-group-addon form">Config</span>
+              <select class="form-control" name="configSelect" ng-model="mainCtrl.configurations.configSelect.name">
+                <option ng-repeat="configs in mainCtrl.configurations.availableConfigs" value="{{configs.name}}">{{configs.name}}</option>
+              </select>
+            </div>
+            <input class="btn btn-connect btn-navbar2" type="submit" value="Set Config"/>
+          </form>
         </div>
       </div>
     </div>

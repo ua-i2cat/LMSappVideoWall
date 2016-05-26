@@ -1,12 +1,12 @@
 <div id="grid" class="grid-snap"></div>
 <input class="btn btn-grid" ng-click="gridCtrl.clickToView()" ng-show="gridCtrl.showAll" value="Create Crop"/>
-<input class="btn btn-grid" ng-click="gridCtrl.playInReceiver()" ng-show="gridCtrl.showPlay" value="Play"/>
+<br>
 <span us-spinner ng-hide="gridCtrl.showAll"></span>
 
 <script type="text/ng-template" id="pushCrop">
     <div class="ngdialog-content" ng-controller="modalController as modalCtrl">
         <form name="cropFormInput" ng-submit="cropFormInput.$valid && modalCtrl.addCrop()" novalidate>
-            <h4>Update user</h4>
+            <h4>Add Cropr</h4>
             <fieldset class="form-group">
                 <div class="row">
                     <div class="input-group">
@@ -19,14 +19,6 @@
                         <span class="input-group-addon form">Aspect Ratio</span>
                         <select class="form-control ng-dirty ng-invalid" name="codecSelect" ng-model="modalCtrl.inputAspectRatio.aspectRatioSelect" required>
                             <option ng-repeat="aspectRatio in modalCtrl.inputAspectRatio.availableAspectRatios" value="{{aspectRatio.name}}">{{aspectRatio.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="input-group">
-                        <span class="input-group-addon form">Type</span>
-                        <select class="form-control ng-dirty ng-invalid" name="codecSelect" ng-model="modalCtrl.inputTypes.typeSelect" required>
-                            <option ng-repeat="type in modalCtrl.inputTypes.availableTypes" value="{{type.name}}">{{type.name}}</option>
                         </select>
                     </div>
                 </div>

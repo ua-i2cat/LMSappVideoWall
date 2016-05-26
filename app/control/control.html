@@ -53,5 +53,35 @@
         </div>
         <input class="btn btn-connect" type="submit" value="Configure Frame Time"/>
     </form>
+    <div class="row">
+        <a class="btn btn-formSelect" ng-click="controlCtrl.playRTSP()" ng-show="controlCtrl.showCrop"><i class="glyphicon glyphicon-play"></i> Play</a>
+    </div>
 </div>
 
+<script type="text/ng-template" id="pushCropSetConfig">
+    <div class="ngdialog-content" ng-controller="modalController as modalCtrl">
+        <form name="cropFormInput" ng-submit="cropFormInput.$valid && modalCtrl.addCrops()" novalidate>
+            <h4>Add Crops </h4>
+            <fieldset class="form-group">
+                <div class="row" ng-repeat="crop in modalCtrl.crops">
+                    <div class="input-group">
+                        <span class="input-group-addon form">IP</span>
+                        <input class="form-control ng-dirty ng-invalid" type="text"  ng-model="crop.IP" required/>
+                        <span class="input-group-addon form">A.R.</span>
+                        <select class="form-control ng-dirty ng-invalid" name="codecSelect" ng-model="crop.aspectRatio.aspectRatioSelect" required>
+                            <option ng-repeat="aspectRatio in crop.aspectRatio.availableAspectRatios" value="{{aspectRatio.name}}">{{aspectRatio.name}}</option>
+                        </select>
+                        <span class="input-group-addon form" ng-show="modalCtrl.showSound">Sound </span>
+                        <span class="form-control" ng-show="modalCtrl.showSound">
+                            <input type="checkbox"  ng-model="modalCtrl.sound"/>
+                        </span>
+                    </div>
+                </div>
+
+            </fieldset>
+            <fieldset class="form-group">
+                <input class="btn btn-connect" type="submit" value="Create crops"/>
+            </fieldset>
+        </form>
+    </div>
+</script>

@@ -10,10 +10,12 @@ function ngDraggable($document, $window){
             dragOptions: '=ngDraggable'
         },*/
         link: function(scope, elem, attr) {
-            var startX, startY, x = 0, y = 0,
+            var startX, startY, x, y,
                 start, stop, drag, container, containerParent;
             elem[0].style.width = scope.mainCtrl.listCrops[scope.mainCtrl.listCrops.length-1].width * winWidth + 'px';
             elem[0].style.height = scope.mainCtrl.listCrops[scope.mainCtrl.listCrops.length-1].height * winHeight + 'px';
+            x = scope.mainCtrl.listCrops[scope.mainCtrl.listCrops.length-1].x;
+            y = scope.mainCtrl.listCrops[scope.mainCtrl.listCrops.length-1].y;
 
             var width  = elem[0].offsetWidth,
                 height = elem[0].offsetHeight;
@@ -65,6 +67,17 @@ function ngDraggable($document, $window){
                 'bottom': containerParent.height,
                 'left': 15
             };
+
+            elem.css({
+                top: Number((y * container.height).toFixed(0))  + 'px',
+                left:  Number((x * container.width).toFixed(0)) + 15 + 'px'
+            });
+            var selected = scope.mainCtrl.listCrops.filter(function (object) {
+                return object.name == elem[0].id;
+            })[0];
+            selected.x = Number((x * container.width).toFixed(0));
+            selected.y = Number((y * container.height).toFixed(0));
+            console.log(selected);
 
             // Bind mousedown event
             elem.on('mousedown', function(e) {

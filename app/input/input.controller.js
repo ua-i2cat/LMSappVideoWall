@@ -10,6 +10,7 @@ function inputController(inputService, $window, $scope){
 
     vm.connectUriRTMP = connectUriRTMP;
     vm.connectUriRTSP = connectUriRTSP;
+    vm.connectVC = connectVC;
 
     function connectUriRTMP(){
         inputService.connectUriRTMP(vm.uri)
@@ -36,6 +37,10 @@ function inputController(inputService, $window, $scope){
                 $scope.$parent.$broadcast('msg', response);
 
             });
+    }
+
+    function connectVC(){
+        alert(vm.command);
     }
 }
 

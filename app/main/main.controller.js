@@ -4,14 +4,16 @@ angular
     .module('video-wall-app')
     .controller('mainController', mainController);
 
-function mainController(apiFunctions, $window, $scope, $timeout){
+function mainController(apiFunctions, mainService, $window, $scope, $timeout){
     var vm = this;
     vm.listCrops = [];
     vm.pageLocation = "";
+    vm.configurations = mainService.configurations;
 
     vm.disconnectMain = function(){
         apiFunctions.disconnect()
         .then(function succesCallback(response){
+            console.log($scope);
             lmsPaths = [];
             vm.listCrops = [];
             idCrops = 1;
@@ -22,6 +24,7 @@ function mainController(apiFunctions, $window, $scope, $timeout){
             sPort = null;
             vm.disconnectShow = false;
             vm.saveShow = false;
+            vm.configurationsShow = false;
             vm.pageLocation = "main";
             $window.location.href='/#/';
             $scope.$parent.$broadcast('msg', response);
@@ -36,6 +39,10 @@ function mainController(apiFunctions, $window, $scope, $timeout){
 
     vm.open = function(){
         console.log("open");
+    };
+
+    vm.setConfig = function(){
+        $scope.$parent.$broadcast('SetConfig');
     };
 
     $scope.$on('msg', function(evt,msg){

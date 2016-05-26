@@ -4,7 +4,7 @@ angular
     .module('video-wall-app')
     .controller('controlController', controlController);
 
-function controlController(apiFunctions, $scope, $q, $document){
+function controlController(apiFunctions, receiverFunctions, $scope, $q, ngDialog,  $document){
     var vm = this,
         videoDecoder = -1;
     vm.selectCrop = "";
@@ -16,11 +16,26 @@ function controlController(apiFunctions, $scope, $q, $document){
 
     vm.showCrop = false;
     vm.showAllCrops = false;
+    $scope.mainCtrl.configurationsShow = true;
+
+    $scope.$on('SetConfig', function(evt){
+        angular.forEach($scope.mainCtrl.configurations.availableConfigs, function(config, key) {
+            if(config.name == $scope.mainCtrl.configurations.configSelect.name){
+                vm.numCrops = config.x * config.y;
+                ngDialog.open({
+                    template: 'pushCropSetConfig',
+                    className: 'ngdialog-theme-default ngdialog-theme-addcrops',
+                    scope: $scope
+                });
+            }
+        });
+    });
 
     vm.fTimeInput = fTimeInput;
     vm.configureCrop = configureCrop;
     vm.configureAllCrops = configureAllCrops;
     vm.deleteSelectCrop = deleteSelectCrop;
+    vm.playRTSP = playRTSP;
     load();
 
     function configureCrop(){
@@ -71,6 +86,13 @@ function controlController(apiFunctions, $scope, $q, $document){
             }, function errorCallback(response){
                 $scope.$parent.$broadcast('msg', response);
             });
+    }
+
+    function playRTSP(){
+        console.log($scope.mainCtrl.listCrops);
+        angular.forEach($scope.mainCtrl.listCrops, function(receivers, key) {
+            receiverFunctions.setPlay(receivers.ip, 'rtsp://' + sHost + ':8554/plainrtp' + receivers.id);
+        });
     }
 
     function fTimeInput(){
