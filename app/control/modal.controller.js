@@ -30,7 +30,6 @@ function modalController($rootScope, $scope) {
     if($scope.mainCtrl) {
         angular.forEach($scope.mainCtrl.configurations.availableConfigs, function (config, key) {
             if (config.name == $scope.mainCtrl.configurations.configSelect.name) {
-                console.log('Entra');
                 vm.crops = [];
                 for (var i = 1; i <= config.x; i++) {
                     for (var j = 1; j <= config.y; j++) {

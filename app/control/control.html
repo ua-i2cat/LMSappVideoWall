@@ -65,6 +65,7 @@
             <fieldset class="form-group">
                 <div class="row" ng-repeat="crop in modalCtrl.crops">
                     <div class="input-group">
+                        <span class="input-group-addon form">Pantalla {{crop.posX}}-{{crop.posY}}</span>
                         <span class="input-group-addon form">IP</span>
                         <input class="form-control ng-dirty ng-invalid" type="text"  ng-model="crop.IP" required/>
                         <span class="input-group-addon form">A.R.</span>
